@@ -1,245 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import CustomerDetailModal from "../components/CustomerDetailModal";
-
-// const Customers = () => {
-//   const [customers, setCustomers] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [search, setSearch] = useState("");
-//   const [editingId, setEditingId] = useState(null);
-//   const [nicknameInput, setNicknameInput] = useState("");
-
-//   useEffect(() => {
-//     const fetchCustomers = async () => {
-//       try {
-//         const res = await fetch("http://localhost:4000/api/users", {
-//           credentials: "include",
-//         });
-//         const data = await res.json();
-//         if (data.success) setCustomers(data.customers);
-//       } catch (err) {
-//         console.error(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchCustomers();
-//   }, []);
-
-//   const startEdit = (customer) => {
-//     setEditingId(customer._id);
-//     setNicknameInput(customer.nickname || "");
-//   };
-
-//   const saveNickname = async (id) => {
-//     try {
-//       const res = await fetch(
-//         `http://localhost:4000/api/users/${id}/nickname`,
-//         {
-//           method: "PUT",
-//           headers: { "Content-Type": "application/json" },
-//           credentials: "include",
-//           body: JSON.stringify({ nickname: nicknameInput }),
-//         },
-//       );
-//       const data = await res.json();
-//       if (data.success) {
-//         setCustomers((prev) =>
-//           prev.map((c) =>
-//             c._id === id ? { ...c, nickname: nicknameInput } : c,
-//           ),
-//         );
-//       }
-//     } catch (err) {
-//       console.error(err);
-//     } finally {
-//       setEditingId(null);
-//     }
-//   };
-
-//   const filtered = customers.filter(
-//     (c) =>
-//       c.name.toLowerCase().includes(search.toLowerCase()) ||
-//       c.email.toLowerCase().includes(search.toLowerCase()) ||
-//       c.nickname?.toLowerCase().includes(search.toLowerCase()),
-//   );
-
-//   if (loading) {
-//     return (
-//       <div className="flex items-center justify-center py-20">
-//         <p className="text-[#4A4A6A]/40 text-sm">Đang tải khách hàng...</p>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="flex flex-col gap-6">
-//       <div className="flex items-center justify-between">
-//         <p className="text-sm text-[#4A4A6A]/60">
-//           Tổng{" "}
-//           <span className="font-semibold text-[#4A4A6A]">
-//             {customers.length}
-//           </span>{" "}
-//           khách hàng
-//         </p>
-//         <input
-//           value={search}
-//           onChange={(e) => setSearch(e.target.value)}
-//           placeholder="Tìm theo tên, email, biệt danh..."
-//           className="border border-[#FFD6E0] rounded-xl px-4 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] bg-white w-64"
-//         />
-//       </div>
-
-//       <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-hidden">
-//         <table className="w-full">
-//           <thead>
-//             <tr className="border-b border-[#FFD6E0]/50">
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Khách hàng
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Biệt danh
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Email
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 SĐT
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Địa chỉ
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Ngày tham gia
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Đơn hàng
-//               </th>
-//               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-//                 Chi tiêu
-//               </th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {filtered.map((c) => (
-//               <tr
-//                 key={c._id}
-//                 className="border-b border-[#FFD6E0]/30 last:border-0 hover:bg-[#FFFAF5] transition-colors"
-//               >
-//                 <td className="px-6 py-4">
-//                   <div className="flex items-center gap-3">
-//                     {c.avatar ? (
-//                       <img
-//                         src={c.avatar}
-//                         className="w-9 h-9 rounded-full object-cover"
-//                         alt={c.name}
-//                       />
-//                     ) : (
-//                       <div className="w-9 h-9 rounded-full bg-[#FFD6E0] flex items-center justify-center text-sm font-medium text-[#4A4A6A]">
-//                         {c.name?.[0]?.toUpperCase()}
-//                       </div>
-//                     )}
-//                     <p className="text-sm font-medium text-[#4A4A6A]">
-//                       {c.name}
-//                     </p>
-//                   </div>
-//                 </td>
-
-//                 {/* Biệt danh — editable inline */}
-//                 <td className="px-6 py-4">
-//                   {editingId === c._id ? (
-//                     <div className="flex items-center gap-2">
-//                       <input
-//                         value={nicknameInput}
-//                         onChange={(e) => setNicknameInput(e.target.value)}
-//                         onKeyDown={(e) =>
-//                           e.key === "Enter" && saveNickname(c._id)
-//                         }
-//                         autoFocus
-//                         placeholder="Nhập biệt danh..."
-//                         className="border border-[#FFB7C5] rounded-lg px-2 py-1 text-sm text-[#4A4A6A] outline-none w-32"
-//                       />
-//                       <button
-//                         onClick={() => saveNickname(c._id)}
-//                         className="text-xs text-[#FFB7C5] hover:underline"
-//                       >
-//                         Lưu
-//                       </button>
-//                     </div>
-//                   ) : (
-//                     <button
-//                       onClick={() => startEdit(c)}
-//                       className="text-sm text-[#4A4A6A]/70 hover:text-[#FFB7C5] transition-colors flex items-center gap-1.5 group"
-//                     >
-//                       {c.nickname ? (
-//                         <span className="px-2 py-0.5 rounded-full bg-[#F5E6FF] text-[#8B98E3] text-xs">
-//                           {c.nickname}
-//                         </span>
-//                       ) : (
-//                         <span className="text-[#4A4A6A]/30 text-xs italic">
-//                           + Thêm biệt danh
-//                         </span>
-//                       )}
-//                     </button>
-//                   )}
-//                 </td>
-
-//                 <td className="px-6 py-4">
-//                   <p className="text-sm text-[#4A4A6A]/70">{c.email}</p>
-//                 </td>
-
-//                 <td className="px-6 py-4">
-//                   <p className="text-sm text-[#4A4A6A]/70">
-//                     {c.phone || (
-//                       <span className="text-[#4A4A6A]/30 italic">Chưa có</span>
-//                     )}
-//                   </p>
-//                 </td>
-
-//                 <td className="px-6 py-4 max-w-[200px]">
-//                   <p className="text-sm text-[#4A4A6A]/70 truncate">
-//                     {c.address || (
-//                       <span className="text-[#4A4A6A]/30 italic">Chưa có</span>
-//                     )}
-//                   </p>
-//                 </td>
-
-//                 <td className="px-6 py-4">
-//                   <p className="text-sm text-[#4A4A6A]/60">
-//                     {new Date(c.createdAt).toLocaleDateString("vi-VN")}
-//                   </p>
-//                 </td>
-
-//                 <td className="px-6 py-4">
-//                   <span className="text-xs px-3 py-1 rounded-full bg-[#FFF0A0] text-[#4A4A6A]">
-//                     {c.totalOrders} đơn
-//                   </span>
-//                 </td>
-
-//                 <td className="px-6 py-4">
-//                   <p className="text-sm font-semibold text-[#FFB7C5]">
-//                     {c.totalSpent.toLocaleString()} đ
-//                   </p>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-
-//         {filtered.length === 0 && (
-//           <div className="text-center py-16">
-//             <span className="text-4xl">👥</span>
-//             <p className="text-sm text-[#4A4A6A]/40 mt-3">
-//               Không tìm thấy khách hàng
-//             </p>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Customers;
-
 import React, { useState, useEffect } from "react";
 import CustomerDetailModal from "../components/CustomerDetailModal";
 
@@ -251,7 +9,7 @@ const ALL_COLUMNS = [
   { key: "createdAt", label: "Ngày tham gia", default: true },
   { key: "totalOrders", label: "Số đơn hàng", default: true },
   { key: "totalSpent", label: "Chi tiêu", default: true },
-  { key: "mailClubSubscribed", label: "Mail Club", default: false },
+  { key: "mailClubSubscribed", label: "Mail Club", default: true },
 ];
 
 const SORT_OPTIONS = [
@@ -597,15 +355,28 @@ const Customers = () => {
 
                 {visibleColumns.includes("mailClubSubscribed") && (
                   <td className="px-6 py-4">
-                    <span
-                      className={`text-xs px-3 py-1 rounded-full font-medium ${
-                        c.mailClubSubscribed
-                          ? "bg-[#FFB7C5] text-white"
-                          : "bg-gray-100 text-gray-400"
-                      }`}
-                    >
-                      {c.mailClubSubscribed ? "✓ Đã đăng ký" : "Chưa"}
-                    </span>
+                    {c.mailClubSubscribed ? (
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-xs px-3 py-1 rounded-full font-medium bg-[#FFB7C5] text-white w-fit">
+                          ✓{" "}
+                          {c.mailClubPlan === "monthly"
+                            ? "Gói Tháng"
+                            : "Gói Quý"}
+                        </span>
+                        {c.mailClubEndDate && (
+                          <span className="text-[10px] text-[#4A4A6A]/40 pl-1">
+                            Hết:{" "}
+                            {new Date(c.mailClubEndDate).toLocaleDateString(
+                              "vi-VN",
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-400">
+                        Chưa đăng ký
+                      </span>
+                    )}
                   </td>
                 )}
               </tr>

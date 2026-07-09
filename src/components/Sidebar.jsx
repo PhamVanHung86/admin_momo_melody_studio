@@ -7,8 +7,11 @@ const navItems = [
   { label: "Thêm sản phẩm", path: "/products/add", emoji: "➕" },
   { label: "Đơn hàng", path: "/orders", emoji: "🛍️" },
   { label: "Khách hàng", path: "/customers", emoji: "👥" },
+  { label: "Mail Club", path: "/mail-club", emoji: "✉️" },
+  { label: "BST Mail Club", path: "/mail-club-collections", emoji: "🖼️" },
   { label: "Flash Sale", path: "/flash-sale", emoji: "⚡" },
   { label: "Banner", path: "/banner", emoji: "🖼️" },
+  { label: "Message", path: "/message", emoji: "📩" },
 ];
 
 const Sidebar = () => {

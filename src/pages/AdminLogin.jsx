@@ -46,7 +46,7 @@ const AdminLogin = () => {
             placeholder="Email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#FFB7C5]"
+            className="border border-[#b8deff] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#b8deff]"
           />
           <input
             type="password"
@@ -54,12 +54,12 @@ const AdminLogin = () => {
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-            className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#FFB7C5]"
+            className="border border-[#b8deff] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#b8deff]"
           />
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-[#FFB7C5] text-white py-3 rounded-xl text-sm font-semibold hover:bg-[#ff9db5] transition-colors disabled:opacity-50"
+            className="bg-[#b8deff] text-white py-3 rounded-xl text-sm font-semibold hover:bg-[#b8deff] transition-colors disabled:opacity-50"
           >
             {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>

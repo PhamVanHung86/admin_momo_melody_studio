@@ -16,7 +16,11 @@ const AuthProvider = ({ children }) => {
         credentials: "include",
       });
       const data = await res.json();
-      if (data.success) setUser(data.user);
+      if (data.success && data.user.role === "admin") {
+        setUser(data.user);
+      } else {
+        setUser(null); // Không phải admin thì không cho vào
+      }
     } catch {
       setUser(null);
     } finally {
@@ -32,7 +36,11 @@ const AuthProvider = ({ children }) => {
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
-    if (data.success) setUser(data.user);
+    if (data.success && data.user.role === "admin") {
+      setUser(data.user);
+    } else if (data.success && data.user.role !== "admin") {
+      return { success: false, message: "Tài khoản không có quyền admin" };
+    }
     return data;
   };
 

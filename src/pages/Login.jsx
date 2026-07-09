@@ -4,10 +4,11 @@ import { useAuth } from "../context/AuthContext";
 
 const AdminLogin = () => {
   const { login } = useAuth();
-  const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);

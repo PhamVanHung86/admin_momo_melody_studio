@@ -12,6 +12,9 @@ import AdminLogin from "./pages/AdminLogin";
 import EditProduct from "./pages/EditProduct";
 import FlashSale from "./pages/FlashSale";
 import Banner from "./pages/Banner";
+import Messages from "./pages/Messages";
+import MailClubManager from "./pages/MailClubManager";
+import MailClubCollections from "./pages/MailClubCollections";
 
 const App = () => {
   const { user, loading } = useAuth();
@@ -51,6 +54,12 @@ const App = () => {
             <Route path="/products/edit/:id" element={<EditProduct />} />
             <Route path="/flash-sale" element={<FlashSale />} />
             <Route path="/banner" element={<Banner />} />
+            <Route path="/message" element={<Messages />} />
+            <Route path="/mail-club" element={<MailClubManager />} />
+            <Route
+              path="/mail-club-collections"
+              element={<MailClubCollections />}
+            />
           </Routes>
         </main>
       </div>
