@@ -1,19 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const CATEGORIES = [
-  { label: "Phone Charms 🌸", value: "phone-charms" },
-  { label: "Keychain 🔑", value: "keychain" },
-  { label: "Pins 📌", value: "pins" },
-  { label: "Mail Club ✉️", value: "mail-club" },
-  { label: "Postcards 🗺️", value: "postcards" },
-  { label: "Stickers ⭐", value: "stickers" },
-];
+import { CATEGORIES } from "../constansts/mailClubData";
 
 const AddProduct = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [images, setImages] = useState([null, null, null, null]);
+  const [previews, setPreviews] = useState([null, null, null, null]);
 
   const [form, setForm] = useState({
     name: "",
@@ -23,9 +17,6 @@ const AddProduct = () => {
     bestseller: false,
     stock: "",
   });
-
-  const [images, setImages] = useState([null, null, null, null]);
-  const [previews, setPreviews] = useState([null, null, null, null]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

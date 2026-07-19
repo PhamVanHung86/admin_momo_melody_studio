@@ -1,24 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CustomerDetailModal from "../components/CustomerDetailModal";
-
-const ALL_COLUMNS = [
-  { key: "nickname", label: "Biệt danh", default: true },
-  { key: "email", label: "Email", default: true },
-  { key: "phone", label: "SĐT", default: true },
-  { key: "address", label: "Địa chỉ", default: false },
-  { key: "createdAt", label: "Ngày tham gia", default: true },
-  { key: "totalOrders", label: "Số đơn hàng", default: true },
-  { key: "totalSpent", label: "Chi tiêu", default: true },
-  { key: "mailClubSubscribed", label: "Mail Club", default: true },
-];
-
-const SORT_OPTIONS = [
-  { value: "createdAt-desc", label: "Mới tham gia nhất" },
-  { value: "createdAt-asc", label: "Cũ nhất" },
-  { value: "totalSpent-desc", label: "Chi tiêu cao nhất" },
-  { value: "totalOrders-desc", label: "Nhiều đơn nhất" },
-  { value: "name-asc", label: "Tên A-Z" },
-];
+import { ALL_COLUMNS, SORT_OPTIONS } from "../constansts/mailClubData";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -32,7 +14,7 @@ const Customers = () => {
     ALL_COLUMNS.filter((c) => c.default).map((c) => c.key),
   );
   const [sortBy, setSortBy] = useState("createdAt-desc");
-  const [mailClubFilter, setMailClubFilter] = useState("all"); // all | subscribed | not
+  const [mailClubFilter, setMailClubFilter] = useState("all");
 
   const fetchCustomers = async () => {
     try {
@@ -91,7 +73,6 @@ const Customers = () => {
     );
   };
 
-  // Filter
   let filtered = customers.filter(
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||

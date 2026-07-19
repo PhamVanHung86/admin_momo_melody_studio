@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-const statusOptions = ["Đang xử lý", "Đang giao", "Đã giao", "Đã hủy"];
-
-const statusColor = {
-  "Đang xử lý": "bg-[#FFD6E0] text-[#4A4A6A]",
-  "Đang giao": "bg-[#FFF0A0] text-[#4A4A6A]",
-  "Đã giao": "bg-[#B8DEFF] text-[#4A4A6A]",
-  "Đã hủy": "bg-gray-100 text-gray-400",
-};
+import { statusColor_order, statusOptions } from "../constansts/mailClubData";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -103,8 +95,7 @@ const Orders = () => {
                     #{order._id.slice(-8).toUpperCase()}
                   </p>
                   <p className="text-xs text-[#4A4A6A]/50">
-                    {order.user?.name} •{" "}
-                    {new Date(order.createdAt).toLocaleDateString("vi-VN")}
+                    {order.user?.name || order.guestEmail || "Khách"}
                   </p>
                 </div>
               </div>
@@ -118,7 +109,7 @@ const Orders = () => {
                   value={order.status}
                   onClick={(e) => e.stopPropagation()}
                   onChange={(e) => updateStatus(order._id, e.target.value)}
-                  className={`text-xs px-3 py-1.5 rounded-full font-medium outline-none cursor-pointer ${statusColor[order.status]}`}
+                  className={`text-xs px-3 py-1.5 rounded-full font-medium outline-none cursor-pointer ${statusColor_order[order.status]}`}
                 >
                   {statusOptions.map((s) => (
                     <option key={s} value={s}>

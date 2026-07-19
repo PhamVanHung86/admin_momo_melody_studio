@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-const statusColor = {
-  "Đang xử lý": "bg-[#FFD6E0] text-[#4A4A6A]",
-  "Đang giao": "bg-[#FFF0A0] text-[#4A4A6A]",
-  "Đã giao": "bg-[#B8DEFF] text-[#4A4A6A]",
-  "Đã hủy": "bg-gray-100 text-gray-400",
-};
+import { statusColor_order } from "../constansts/mailClubData";
 
 const CustomerDetailModal = ({ customerId, onClose }) => {
   const [customer, setCustomer] = useState(null);
@@ -167,7 +161,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                                 )}
                               </span>
                               <span
-                                className={`text-xs px-2 py-0.5 rounded-full ${statusColor[order.status]}`}
+                                className={`text-xs px-2 py-0.5 rounded-full ${statusColor_order[order.status]}`}
                               >
                                 {order.status}
                               </span>

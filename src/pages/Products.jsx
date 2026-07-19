@@ -1,24 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-const CATEGORIES = [
-  "Tất cả",
-  "phone-charms",
-  "keychain",
-  "pins",
-  "mail-club",
-  "postcards",
-  "stickers",
-];
-
-const bgColor = {
-  "phone-charms": "bg-[#FFD6E0]",
-  keychain: "bg-[#FFF0A0]",
-  pins: "bg-[#B8DEFF]",
-  "mail-club": "bg-[#FFD6E0]",
-  postcards: "bg-[#FFF0A0]",
-  stickers: "bg-[#B8DEFF]",
-};
+import { CATEGORIES_NAME, bgColor } from "../constansts/mailClubData";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -82,7 +64,7 @@ const Products = () => {
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex gap-3 flex-wrap">
-          {CATEGORIES.map((cat) => (
+          {CATEGORIES_NAME.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}

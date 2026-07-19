@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
-const CATEGORIES = [
-  { label: "Phone Charms 🌸", value: "phone-charms" },
-  { label: "Keychain 🔑", value: "keychain" },
-  { label: "Pins 📌", value: "pins" },
-  { label: "Mail Club ✉️", value: "mail-club" },
-  { label: "Postcards 🗺️", value: "postcards" },
-  { label: "Stickers ⭐", value: "stickers" },
-];
+import { CATEGORIES } from "../constansts/mailClubData";
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -16,6 +8,9 @@ const EditProduct = () => {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [success, setSuccess] = useState(false);
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([null, null, null, null]);
+  const [newPreviews, setNewPreviews] = useState([null, null, null, null]);
 
   const [form, setForm] = useState({
     name: "",
@@ -25,10 +20,6 @@ const EditProduct = () => {
     bestseller: false,
     stock: "",
   });
-
-  const [existingImages, setExistingImages] = useState([]);
-  const [newImages, setNewImages] = useState([null, null, null, null]);
-  const [newPreviews, setNewPreviews] = useState([null, null, null, null]);
 
   // Load sản phẩm hiện tại
   useEffect(() => {

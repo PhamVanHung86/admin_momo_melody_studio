@@ -9,29 +9,48 @@ const DEFAULT_MESSAGES = [
 
 const PETAL_COLORS = ["fill-orange-400", "fill-amber-400", "fill-rose-400"];
 
-/**
- * Overlay loading hình bông hoa xoay (Tailwind).
- * Cần thêm animation "spin-slow", "bloom", "pulse-center" vào tailwind.config.js
- * (xem tailwind.config.snippet.js).
- *
- * Cách dùng:
- *   <LoadingFlower show={uploading} />
- *   <LoadingFlower show={uploading} progress={45} messages={["Đang nén ảnh..."]} />
- */
 export default function LoadingFlower({
   show = false,
-  progress = null,
+  onClose,
   messages = DEFAULT_MESSAGES,
 }) {
   const [msgIndex, setMsgIndex] = useState(0);
+  const [internalProgress, setInternalProgress] = useState(0); // 👈 Tự quản lý tiến trình bên trong
 
+  // 1. Tự động đổi thông báo nhanh hơn (mỗi 0.8s) để người dùng kịp đọc trong vòng 3s ngắn ngủi
   useEffect(() => {
     if (!show || messages.length < 2) return;
     const id = setInterval(() => {
       setMsgIndex((i) => (i + 1) % messages.length);
-    }, 2200);
+    }, 800);
     return () => clearInterval(id);
   }, [show, messages.length]);
+
+  // 2. Bộ đếm thời gian: Chạy progress từ 0% -> 100% trong đúng 3000ms (3 giây)
+  useEffect(() => {
+    if (!show) {
+      setInternalProgress(0);
+      setMsgIndex(0);
+      return;
+    }
+
+    const totalDuration = 3000; // 3 giây
+    const updateInterval = 30; // Cập nhật mỗi 30ms cho thanh loading mượt mà
+    const step = (100 / totalDuration) * updateInterval;
+
+    const timer = setInterval(() => {
+      setInternalProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          if (onClose) onClose(); // 🔔 Hết 3 giây -> Tự kích hoạt hàm đóng modal bên ngoài
+          return 100;
+        }
+        return prev + step;
+      });
+    }, updateInterval);
+
+    return () => clearInterval(timer);
+  }, [show, onClose]);
 
   if (!show) return null;
 
@@ -41,7 +60,7 @@ export default function LoadingFlower({
       aria-live="polite"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm"
     >
-      <div className="flex max-w-xs flex-col items-center gap-4 rounded-2xl bg-orange-50 px-11 py-9 text-center shadow-xl">
+      <div className="flex max-w-xs w-full flex-col items-center gap-4 rounded-2xl bg-orange-50 px-11 py-9 text-center shadow-xl mx-4">
         <svg viewBox="0 0 200 200" className="h-24 w-24">
           <g className="origin-center animate-spin-slow motion-reduce:animate-none">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -68,18 +87,19 @@ export default function LoadingFlower({
           />
         </svg>
 
-        <p className="min-h-[20px] text-sm font-medium text-stone-600">
+        <p className="min-h-[40px] flex items-center justify-center text-sm font-medium text-stone-600 framework-msg">
           {messages[msgIndex]}
         </p>
 
-        {progress !== null && (
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-orange-100">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-300"
-              style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
-            />
-          </div>
-        )}
+        {/* Thanh Progress tự động chạy cực kỳ xịn sò */}
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-orange-100">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-75 ease-linear"
+            style={{
+              width: `${Math.min(100, Math.max(0, internalProgress))}%`,
+            }}
+          />
+        </div>
       </div>
     </div>
   );

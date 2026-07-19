@@ -13,30 +13,33 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import LoadingFlower from "../components/LoadingFlower";
 
-const statusColor = {
-  "Đang xử lý": "bg-[#FFD6E0] text-[#4A4A6A]",
-  "Đang giao": "bg-[#FFF0A0] text-[#4A4A6A]",
-  "Đã giao": "bg-[#B8DEFF] text-[#4A4A6A]",
-  "Đã hủy": "bg-gray-100 text-gray-400",
-};
-
-const PIE_COLORS = [
-  "#FFB7C5",
-  "#FFD9A0",
-  "#B8DEFF",
-  "#C9A0FF",
-  "#A0E8C8",
-  "#FFA0A0",
-];
+import { statusColor_order, PIE_COLORS } from "../constansts/mailClubData";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState("month");
+  const [mailClubStats, setMailClubStats] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const fetchMailClubStats = async () => {
+    setIsUploading(true);
+    try {
+      const res = await fetch("http://localhost:4000/api/mail-club/stats", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.success) setMailClubStats(data.stats);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const fetchStats = async () => {
+    setIsUploading(true);
     try {
       const res = await fetch(
         "http://localhost:4000/api/orders/dashboard-stats",
@@ -52,6 +55,7 @@ const Dashboard = () => {
   };
 
   const fetchAnalytics = async (selectedPeriod) => {
+    setIsUploading(true);
     try {
       const res = await fetch(
         `http://localhost:4000/api/orders/analytics?period=${selectedPeriod}`,
@@ -81,7 +85,11 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-[#4A4A6A]/40 text-sm">Đang tải dữ liệu...</p>
+        {/* <p className="text-[#4A4A6A]/40 text-sm">Đang tải dữ liệu...</p> */}
+        <LoadingFlower
+          show={isUploading}
+          onClose={() => setIsUploading(false)}
+        />
       </div>
     );
   }
@@ -99,6 +107,30 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col gap-8">
       {/* Stat cards */}
+      <div className="bg-[#FFF0F5] rounded-3xl p-6 border border-[#FFD6E0] grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <p className="text-xs text-[#4A4A6A]/60">
+            Doanh thu Mail Club (Tháng này)
+          </p>
+          <p className="text-xl font-bold text-[#4A4A6A] mt-1">
+            {mailClubStats
+              ? `${mailClubStats.monthlyRevenue.toLocaleString()} đ`
+              : "0 đ"}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs text-[#4A4A6A]/60">Thành viên đang hoạt động</p>
+          <p className="text-xl font-bold text-[#4A4A6A] mt-1">
+            {mailClubStats ? `${mailClubStats.activeMembers} thành viên` : "0"}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs text-[#4A4A6A]/60">Gói đăng ký nhiều nhất</p>
+          <p className="text-xl font-bold text-[#448ecf] mt-1">
+            {mailClubStats ? mailClubStats.popularPlan : "Chưa có"}
+          </p>
+        </div>
+      </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           emoji="💰"
@@ -308,7 +340,7 @@ const Dashboard = () => {
                     {order.total.toLocaleString()} đ
                   </p>
                   <span
-                    className={`text-xs px-3 py-1 rounded-full font-medium ${statusColor[order.status]}`}
+                    className={`text-xs px-3 py-1 rounded-full font-medium ${statusColor_order[order.status]}`}
                   >
                     {order.status}
                   </span>
