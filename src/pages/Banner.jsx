@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { apiFetch } from "../api/client";
+import toast from "react-hot-toast";
+import { handleApiError } from "../utils/handleError";
+import CuteLoadingModal from "../components/CuteLoadingModal";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Banners = () => {
   const [banners, setBanners] = useState([]);
@@ -6,6 +11,13 @@ const Banners = () => {
   const [showForm, setShowForm] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  const [isCreating, setIsCreating] = useState(false);
+
+  // State cho Modal Xóa Banner
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null); // Lưu thông tin banner sắp xóa
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -18,13 +30,13 @@ const Banners = () => {
 
   const fetchBanners = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/banners", {
+      const res = await apiFetch("/api/banners", {
         credentials: "include",
       });
       const data = await res.json();
       if (data.success) setBanners(data.banners);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải danh sách banner");
     } finally {
       setLoading(false);
     }
@@ -43,22 +55,26 @@ const Banners = () => {
 
   const handleSubmit = async () => {
     if (!form.title || !imageFile) {
-      alert("Vui lòng điền tên và thêm ảnh!");
+      toast.error("Vui lòng điền tên và thêm ảnh!");
       return;
     }
+
+    setIsCreating(true);
 
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([key, val]) => formData.append(key, val));
       formData.append("image", imageFile);
 
-      const res = await fetch("http://localhost:4000/api/banners", {
+      const res = await apiFetch("/api/banners", {
         method: "POST",
         credentials: "include",
         body: formData,
       });
+
       const data = await res.json();
       if (data.success) {
+        toast.success("Tạo banner thành công! ✨");
         setShowForm(false);
         setForm({
           title: "",
@@ -71,15 +87,19 @@ const Banners = () => {
         setImageFile(null);
         setPreview(null);
         fetchBanners();
+      } else {
+        handleApiError(data.message, "Lưu banner thất bại");
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Lưu banner thất bại");
+    } finally {
+      setIsCreating(false);
     }
   };
 
   const toggleActive = async (id, current) => {
     try {
-      await fetch(`http://localhost:4000/api/banners/${id}`, {
+      await apiFetch(`/api/banners/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -87,20 +107,40 @@ const Banners = () => {
       });
       fetchBanners();
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Đổi trạng thái banner thất bại");
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Xóa banner này?")) return;
+  // 1. Mở modal xác nhận xóa
+  const openDeleteModal = (banner) => {
+    setDeleteTarget(banner);
+    setDeleteModalOpen(true);
+  };
+
+  // 2. Đóng modal xóa
+  const closeDeleteModal = () => {
+    if (isDeleting) return; // Không đóng khi đang chờ gọi API
+    setDeleteModalOpen(false);
+    setDeleteTarget(null);
+  };
+
+  // 3. Thực thi xóa sau khi bấm nút Xác nhận trên Modal
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
     try {
-      await fetch(`http://localhost:4000/api/banners/${id}`, {
+      await apiFetch(`/api/banners/${deleteTarget._id}`, {
         method: "DELETE",
         credentials: "include",
       });
+      toast.success("Xóa banner thành công! 🗑️");
+      closeDeleteModal();
       fetchBanners();
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Xoá banner thất bại");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -168,7 +208,7 @@ const Banners = () => {
                 </p>
               )}
               <button
-                onClick={() => handleDelete(b._id)}
+                onClick={() => openDeleteModal(b)}
                 className="text-xs px-3 py-1.5 rounded-xl border border-red-200 text-red-400 hover:bg-red-50 transition-colors w-full"
               >
                 Xóa banner
@@ -185,7 +225,7 @@ const Banners = () => {
         )}
       </div>
 
-      {/* Modal tạo banner */}
+      {/* Modal form tạo banner */}
       {showForm && (
         <>
           <div
@@ -199,7 +239,7 @@ const Banners = () => {
               </h3>
 
               <div className="flex flex-col gap-4">
-                {/* Ảnh */}
+                {/* Chọn ảnh */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs text-[#4A4A6A]/60">
                     Ảnh banner (khuyến nghị 16:9)
@@ -209,6 +249,7 @@ const Banners = () => {
                       <img
                         src={preview}
                         className="w-full aspect-[16/9] object-cover rounded-2xl"
+                        alt="Preview"
                       />
                       <button
                         onClick={() => {
@@ -322,6 +363,38 @@ const Banners = () => {
           </div>
         </>
       )}
+
+      {/* Loading Modal chuẩn tone Xanh Dương Pastel khi tạo banner */}
+      <CuteLoadingModal
+        isLoading={isCreating}
+        text="Đang thiết kế banner, chờ chút nha..."
+        logoSrc="/logo_blue.png"
+      />
+
+      {/* Modal Xác nhận xóa Banner */}
+      <ConfirmModal
+        open={deleteModalOpen}
+        title="Xác nhận xóa banner"
+        message={
+          deleteTarget ? (
+            <span>
+              Bạn có chắc chắn muốn xóa banner{" "}
+              <strong className="font-semibold text-[#4A4A6A]">
+                "{deleteTarget.title}"
+              </strong>{" "}
+              không? Hành động này không thể hoàn tác.
+            </span>
+          ) : (
+            "Bạn có chắc chắn muốn xóa banner này?"
+          )
+        }
+        confirmLabel="Xóa banner"
+        cancelLabel="Hủy"
+        danger={true}
+        loading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };

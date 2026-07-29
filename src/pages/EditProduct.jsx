@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CATEGORIES } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+import { handleApiError } from "../utils/handleError";
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -25,7 +27,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/products/${id}`);
+        const res = await apiFetch(`/api/products/${id}`);
         const data = await res.json();
         if (data.success) {
           const p = data.product;
@@ -40,7 +42,7 @@ const EditProduct = () => {
           setExistingImages(p.images || []);
         }
       } catch (err) {
-        console.error(err);
+        handleApiError(err, "Không thể tải thông tin sản phẩm");
       } finally {
         setFetching(false);
       }
@@ -90,7 +92,7 @@ const EditProduct = () => {
         if (img) formData.append("images", img);
       });
 
-      const res = await fetch(`http://localhost:4000/api/products/${id}`, {
+      const res = await apiFetch(`/api/products/${id}`, {
         method: "PUT",
         credentials: "include",
         body: formData,
@@ -102,7 +104,7 @@ const EditProduct = () => {
         setTimeout(() => navigate("/products"), 1500);
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Cập nhật sản phẩm thất bại");
     } finally {
       setLoading(false);
     }

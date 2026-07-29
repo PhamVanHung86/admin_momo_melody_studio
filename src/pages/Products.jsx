@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CATEGORIES_NAME, bgColor } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+import TableSkeleton from "../components/TableSkeleton";
+import { handleApiError } from "../utils/handleError";
+import toast from "react-hot-toast";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Tất cả");
-  const [deletingId, setDeletingId] = useState(null);
+
+  // State quản lý Modal Xóa Sản phẩm
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/products");
+      const res = await apiFetch("/api/products");
       const data = await res.json();
       if (data.success) setProducts(data.products);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải danh sách sản phẩm");
     } finally {
       setLoading(false);
     }
@@ -25,23 +34,39 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+  // 1. Mở modal xác nhận xóa
+  const openDeleteModal = (product) => {
+    setDeleteTarget(product);
+    setDeleteModalOpen(true);
+  };
 
-    setDeletingId(id);
+  // 2. Đóng modal xóa
+  const closeDeleteModal = () => {
+    if (isDeleting) return;
+    setDeleteModalOpen(false);
+    setDeleteTarget(null);
+  };
+
+  // 3. Xử lý gọi API xóa sản phẩm
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
     try {
-      const res = await fetch(`http://localhost:4000/api/products/${id}`, {
+      const res = await apiFetch(`/api/products/${deleteTarget._id}`, {
         method: "DELETE",
         credentials: "include",
       });
       const data = await res.json();
       if (data.success) {
-        setProducts((prev) => prev.filter((p) => p._id !== id));
+        setProducts((prev) => prev.filter((p) => p._id !== deleteTarget._id));
+        toast.success("Đã xoá sản phẩm 🗑️");
+        closeDeleteModal();
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Xoá sản phẩm thất bại");
     } finally {
-      setDeletingId(null);
+      setIsDeleting(false);
     }
   };
 
@@ -52,11 +77,7 @@ const Products = () => {
   });
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-[#4A4A6A]/40 text-sm">Đang tải sản phẩm...</p>
-      </div>
-    );
+    return <TableSkeleton rows={12} />;
   }
 
   return (
@@ -185,11 +206,10 @@ const Products = () => {
                       Sửa
                     </Link>
                     <button
-                      onClick={() => handleDelete(p._id)}
-                      disabled={deletingId === p._id}
-                      className="text-xs px-3 py-1.5 rounded-xl border border-red-200 text-red-400 hover:bg-red-50 transition-colors disabled:opacity-50"
+                      onClick={() => openDeleteModal(p)}
+                      className="text-xs px-3 py-1.5 rounded-xl border border-red-200 text-red-400 hover:bg-red-50 transition-colors"
                     >
-                      {deletingId === p._id ? "Đang xóa..." : "Xóa"}
+                      Xóa
                     </button>
                   </div>
                 </td>
@@ -207,6 +227,31 @@ const Products = () => {
           </div>
         )}
       </div>
+
+      {/* Modal Xác nhận xóa Sản phẩm */}
+      <ConfirmModal
+        open={deleteModalOpen}
+        title="Xác nhận xóa sản phẩm"
+        message={
+          deleteTarget ? (
+            <span>
+              Bạn có chắc chắn muốn xóa sản phẩm{" "}
+              <strong className="font-semibold text-[#4A4A6A]">
+                "{deleteTarget.name}"
+              </strong>{" "}
+              không? Hành động này không thể hoàn tác.
+            </span>
+          ) : (
+            "Bạn có chắc chắn muốn xóa sản phẩm này?"
+          )
+        }
+        confirmLabel="Xóa sản phẩm"
+        cancelLabel="Hủy"
+        danger={true}
+        loading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };

@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { apiFetch } from "../api/client";
+import toast from "react-hot-toast";
+import { handleApiError } from "../utils/handleError";
+import ConfirmModal from "../components/ConfirmModal";
 
 const FlashSale = () => {
   const [flashSales, setFlashSales] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+
+  // State quản lý Modal Xóa Flash Sale
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -17,17 +26,17 @@ const FlashSale = () => {
   const fetchData = async () => {
     try {
       const [salesRes, productsRes] = await Promise.all([
-        fetch("http://localhost:4000/api/flash-sales", {
+        apiFetch("/api/flash-sales", {
           credentials: "include",
         }),
-        fetch("http://localhost:4000/api/products"),
+        apiFetch("/api/products"),
       ]);
       const salesData = await salesRes.json();
       const productsData = await productsRes.json();
       if (salesData.success) setFlashSales(salesData.flashSales);
       if (productsData.success) setProducts(productsData.products);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải dữ liệu flash sale");
     } finally {
       setLoading(false);
     }
@@ -54,12 +63,12 @@ const FlashSale = () => {
       !form.startTime ||
       !form.endTime
     ) {
-      alert("Vui lòng điền đầy đủ thông tin!");
+      toast.error("Vui lòng điền đầy đủ thông tin!");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/flash-sales", {
+      const res = await apiFetch("/api/flash-sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -67,6 +76,7 @@ const FlashSale = () => {
       });
       const data = await res.json();
       if (data.success) {
+        toast.success("Tạo flash sale thành công! ⚡");
         setShowForm(false);
         setForm({
           title: "",
@@ -78,20 +88,40 @@ const FlashSale = () => {
         fetchData();
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Lưu flash sale thất bại");
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Xóa flash sale này?")) return;
+  // 1. Mở modal xác nhận xóa
+  const openDeleteModal = (sale) => {
+    setDeleteTarget(sale);
+    setDeleteModalOpen(true);
+  };
+
+  // 2. Đóng modal xóa
+  const closeDeleteModal = () => {
+    if (isDeleting) return;
+    setDeleteModalOpen(false);
+    setDeleteTarget(null);
+  };
+
+  // 3. Xử lý gọi API xóa chiến dịch
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
     try {
-      await fetch(`http://localhost:4000/api/flash-sales/${id}`, {
+      await apiFetch(`/api/flash-sales/${deleteTarget._id}`, {
         method: "DELETE",
         credentials: "include",
       });
+      toast.success("Đã xóa chiến dịch flash sale! 🗑️");
+      closeDeleteModal();
       fetchData();
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Xoá flash sale thất bại");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -161,7 +191,7 @@ const FlashSale = () => {
                 </span>
               </div>
               <button
-                onClick={() => handleDelete(sale._id)}
+                onClick={() => openDeleteModal(sale)}
                 className="text-xs px-3 py-1.5 rounded-xl border border-red-200 text-red-400 hover:bg-red-50 transition-colors"
               >
                 Xóa
@@ -327,6 +357,31 @@ const FlashSale = () => {
           </div>
         </>
       )}
+
+      {/* Modal Xác nhận xóa Flash Sale */}
+      <ConfirmModal
+        open={deleteModalOpen}
+        title="Xác nhận xóa Flash Sale"
+        message={
+          deleteTarget ? (
+            <span>
+              Bạn có chắc chắn muốn xóa chiến dịch{" "}
+              <strong className="font-semibold text-[#4A4A6A]">
+                "{deleteTarget.title}"
+              </strong>{" "}
+              không? Hành động này không thể hoàn tác.
+            </span>
+          ) : (
+            "Bạn có chắc chắn muốn xóa chiến dịch flash sale này?"
+          )
+        }
+        confirmLabel="Xóa chiến dịch"
+        cancelLabel="Hủy"
+        danger={true}
+        loading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };

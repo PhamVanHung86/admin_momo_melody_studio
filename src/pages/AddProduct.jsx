@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIES } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+import toast from "react-hot-toast";
+import { handleApiError } from "../utils/handleError";
+import CuteLoadingModal from "../components/CuteLoadingModal";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -8,6 +12,8 @@ const AddProduct = () => {
   const [success, setSuccess] = useState(false);
   const [images, setImages] = useState([null, null, null, null]);
   const [previews, setPreviews] = useState([null, null, null, null]);
+
+  const [isCreating, setIsCreating] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -52,10 +58,11 @@ const AddProduct = () => {
   const handleSubmit = async () => {
     if (!form.name || !form.price || !form.category) return;
     if (!images.some((img) => img !== null)) {
-      alert("Vui lòng thêm ít nhất 1 ảnh!");
+      toast.success("Vui lòng thêm ít nhất 1 ảnh!");
       return;
     }
 
+    setIsCreating(true);
     setLoading(true);
     try {
       const formData = new FormData();
@@ -70,7 +77,7 @@ const AddProduct = () => {
         if (img) formData.append("images", img);
       });
 
-      const res = await fetch("http://localhost:4000/api/products", {
+      const res = await apiFetch("/api/products", {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -78,30 +85,30 @@ const AddProduct = () => {
 
       const data = await res.json();
       if (data.success) {
-        setSuccess(true);
+        //setSuccess(true);
         setTimeout(() => navigate("/products"), 1500);
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Thêm sản phẩm thất bại");
     } finally {
       setLoading(false);
     }
   };
 
-  if (success) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
-        <span className="text-6xl">🎀</span>
-        <p
-          style={{ fontFamily: "'Dancing Script', cursive" }}
-          className="text-3xl text-[#4A4A6A]"
-        >
-          Thêm sản phẩm thành công!
-        </p>
-        <p className="text-sm text-[#4A4A6A]/50">Đang chuyển về danh sách...</p>
-      </div>
-    );
-  }
+  // if (success) {
+  //   return (
+  //     <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+  //       <span className="text-6xl">🎀</span>
+  //       <p
+  //         style={{ fontFamily: "'Dancing Script', cursive" }}
+  //         className="text-3xl text-[#4A4A6A]"
+  //       >
+  //         Thêm sản phẩm thành công!
+  //       </p>
+  //       <p className="text-sm text-[#4A4A6A]/50">Đang chuyển về danh sách...</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="max-w-3xl flex flex-col gap-6">
@@ -268,6 +275,12 @@ const AddProduct = () => {
           {loading ? "Đang lưu..." : "Thêm sản phẩm 🌸"}
         </button>
       </div>
+
+      <CuteLoadingModal
+        isLoading={isCreating}
+        text="Đang thêm sản phẩm mới, chờ chút nha... Quá trình tải ảnh lên hơi lâu nên cố chờ chút nhé!"
+        logoSrc="/logo_blue.png"
+      />
     </div>
   );
 };

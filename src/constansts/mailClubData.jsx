@@ -66,6 +66,7 @@ export const SORT_OPTIONS = [
 
 export const statusColor_order = {
   "Đang xử lý": "bg-[#FFD6E0] text-[#4A4A6A]",
+  "Đã xác nhận": "bg-[#C9A0FF] text-white",
   "Đang giao": "bg-[#FFF0A0] text-[#4A4A6A]",
   "Đã giao": "bg-[#B8DEFF] text-[#4A4A6A]",
   "Đã hủy": "bg-gray-100 text-gray-400",
@@ -80,7 +81,13 @@ export const PIE_COLORS = [
   "#FFA0A0",
 ];
 
-export const statusOptions = ["Đang xử lý", "Đang giao", "Đã giao", "Đã hủy"];
+export const statusOptions = [
+  "Đang xử lý",
+  "Đã xác nhận",
+  "Đang giao",
+  "Đã giao",
+  "Đã hủy",
+];
 
 export const CATEGORIES_NAME = [
   "Tất cả",

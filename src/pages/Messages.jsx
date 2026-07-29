@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { apiFetch } from "../api/client";
+import { handleApiError } from "../utils/handleError";
+import toast from "react-hot-toast";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // State quản lý Modal Xóa Tin Nhắn
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const fetchMessages = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/contact", {
+      const res = await apiFetch("/api/contact", {
         credentials: "include",
       });
       const data = await res.json();
       if (data.success) setMessages(data.messages);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải tin nhắn");
     } finally {
       setLoading(false);
     }
@@ -24,7 +33,7 @@ const Messages = () => {
 
   const markRead = async (id) => {
     try {
-      await fetch(`http://localhost:4000/api/contact/${id}/read`, {
+      await apiFetch(`/api/contact/${id}/read`, {
         method: "PUT",
         credentials: "include",
       });
@@ -32,20 +41,40 @@ const Messages = () => {
         prev.map((m) => (m._id === id ? { ...m, read: true } : m)),
       );
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Đánh dấu đã đọc thất bại");
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Xóa tin nhắn này?")) return;
+  // 1. Mở modal xác nhận xóa
+  const openDeleteModal = (message) => {
+    setDeleteTarget(message);
+    setDeleteModalOpen(true);
+  };
+
+  // 2. Đóng modal xóa
+  const closeDeleteModal = () => {
+    if (isDeleting) return;
+    setDeleteModalOpen(false);
+    setDeleteTarget(null);
+  };
+
+  // 3. Xử lý gọi API xóa tin nhắn
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
     try {
-      await fetch(`http://localhost:4000/api/contact/${id}`, {
+      await apiFetch(`/api/contact/${deleteTarget._id}`, {
         method: "DELETE",
         credentials: "include",
       });
-      setMessages((prev) => prev.filter((m) => m._id !== id));
+      setMessages((prev) => prev.filter((m) => m._id !== deleteTarget._id));
+      toast.success("Đã xóa tin nhắn! 🗑️");
+      closeDeleteModal();
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Xoá tin nhắn thất bại");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -96,7 +125,7 @@ const Messages = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDelete(m._id);
+                    openDeleteModal(m);
                   }}
                   className="text-xs text-red-400 hover:underline"
                 >
@@ -117,6 +146,31 @@ const Messages = () => {
           </div>
         )}
       </div>
+
+      {/* Modal Xác nhận xóa Tin nhắn */}
+      <ConfirmModal
+        open={deleteModalOpen}
+        title="Xác nhận xóa tin nhắn"
+        message={
+          deleteTarget ? (
+            <span>
+              Bạn có chắc chắn muốn xóa tin nhắn từ{" "}
+              <strong className="font-semibold text-[#4A4A6A]">
+                "{deleteTarget.name}"
+              </strong>{" "}
+              không? Hành động này không thể hoàn tác.
+            </span>
+          ) : (
+            "Bạn có chắc chắn muốn xóa tin nhắn này?"
+          )
+        }
+        confirmLabel="Xóa tin nhắn"
+        cancelLabel="Hủy"
+        danger={true}
+        loading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };

@@ -13,9 +13,13 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import LoadingFlower from "../components/LoadingFlower";
+import LoadingFlower from "../components/TableSkeleton";
 
 import { statusColor_order, PIE_COLORS } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+
+import TableSkeleton from "../components/TableSkeleton";
+import { handleApiError } from "../utils/handleError";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -28,37 +32,34 @@ const Dashboard = () => {
   const fetchMailClubStats = async () => {
     setIsUploading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/mail-club/stats", {
+      const res = await apiFetch("/api/mail-club/stats", {
         credentials: "include",
       });
       const data = await res.json();
       if (data.success) setMailClubStats(data.stats);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải thống kê Mail Club");
     }
   };
 
   const fetchStats = async () => {
     setIsUploading(true);
     try {
-      const res = await fetch(
-        "http://localhost:4000/api/orders/dashboard-stats",
-        {
-          credentials: "include",
-        },
-      );
+      const res = await apiFetch("/api/orders/dashboard-stats", {
+        credentials: "include",
+      });
       const data = await res.json();
       if (data.success) setStats(data.stats);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải thống kê tổng quan");
     }
   };
 
   const fetchAnalytics = async (selectedPeriod) => {
     setIsUploading(true);
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/orders/analytics?period=${selectedPeriod}`,
+      const res = await apiFetch(
+        `/api/orders/analytics?period=${selectedPeriod}`,
         {
           credentials: "include",
         },
@@ -66,13 +67,17 @@ const Dashboard = () => {
       const data = await res.json();
       if (data.success) setAnalytics(data.analytics);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải dữ liệu phân tích");
     }
   };
 
   useEffect(() => {
     const init = async () => {
-      await Promise.all([fetchStats(), fetchAnalytics(period)]);
+      await Promise.all([
+        fetchStats(),
+        fetchAnalytics(period),
+        fetchMailClubStats(),
+      ]);
       setLoading(false);
     };
     init();
@@ -83,15 +88,7 @@ const Dashboard = () => {
   }, [period]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        {/* <p className="text-[#4A4A6A]/40 text-sm">Đang tải dữ liệu...</p> */}
-        <LoadingFlower
-          show={isUploading}
-          onClose={() => setIsUploading(false)}
-        />
-      </div>
-    );
+    return <TableSkeleton rows={6} />;
   }
 
   if (!stats || !analytics) {
@@ -318,7 +315,7 @@ const Dashboard = () => {
       </div>
 
       {/* Đơn hàng gần đây */}
-      <div className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50">
+      {/* <div className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50">
         <h3 className="text-sm font-semibold text-[#4A4A6A] mb-5">
           Đơn hàng gần đây
         </h3>
@@ -353,7 +350,7 @@ const Dashboard = () => {
             Chưa có đơn hàng nào
           </p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

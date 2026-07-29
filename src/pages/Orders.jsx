@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { statusColor_order, statusOptions } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+import TableSkeleton from "../components/TableSkeleton";
+import ConfirmModal from "../components/ConfirmModal";
+import toast from "react-hot-toast";
+import { handleApiError } from "../utils/handleError";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("Tất cả");
   const [expandedId, setExpandedId] = useState(null);
+  const [confirmTarget, setConfirmTarget] = useState(null);
+  const [confirming, setConfirming] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/orders", {
+      const res = await apiFetch("/api/orders", {
         credentials: "include",
       });
       const data = await res.json();
       if (data.success) setOrders(data.orders);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải danh sách đơn hàng");
     } finally {
       setLoading(false);
     }
@@ -23,11 +31,17 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
+    // 1. Lắng nghe tín hiệu cập nhật từ MailClubManager
+    const handleSync = () => fetchOrders();
+    window.addEventListener("mailclub-updated", handleSync);
+
+    // Dọn dẹp listener khi unmount
+    return () => window.removeEventListener("mailclub-updated", handleSync);
   }, []);
 
   const updateStatus = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/orders/${id}/status`, {
+      const res = await apiFetch(`/api/orders/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -38,26 +52,77 @@ const Orders = () => {
         setOrders((prev) =>
           prev.map((o) => (o._id === id ? { ...o, status } : o)),
         );
+        window.dispatchEvent(new Event("mailclub-updated"));
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Cập nhật trạng thái thất bại");
     }
   };
 
-  const filtered = orders.filter(
-    (o) => filterStatus === "Tất cả" || o.status === filterStatus,
-  );
+  const handleConfirmOrder = async (sendEmail) => {
+    if (!confirmTarget) return;
+    setConfirming(true);
+    try {
+      const res = await apiFetch(`/api/orders/${confirmTarget._id}/confirm`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ sendEmail }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o._id === confirmTarget._id ? { ...o, status: "Đã xác nhận" } : o,
+          ),
+        );
+        setConfirmTarget(null);
+        toast.success("Đã xác nhận đơn hàng");
+        window.dispatchEvent(new Event("mailclub-updated"));
+      } else {
+        handleApiError(data.message, "Xác nhận đơn hàng thất bại");
+      }
+    } catch (err) {
+      handleApiError(err, "Xác nhận đơn hàng thất bại");
+    } finally {
+      setConfirming(false);
+    }
+  };
+
+  const filtered = orders.filter((o) => {
+    const matchStatus = filterStatus === "Tất cả" || o.status === filterStatus;
+
+    const orderCode = o._id.slice(-8).toUpperCase();
+    const query = searchQuery.trim().replace("#", "").toUpperCase();
+    const matchSearch = query === "" || orderCode.includes(query);
+
+    return matchStatus && matchSearch;
+  });
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-[#4A4A6A]/40 text-sm">Đang tải đơn hàng...</p>
-      </div>
-    );
+    return <TableSkeleton rows={12} />;
   }
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Tìm kiếm theo mã đơn */}
+      <div className="relative max-w-xs">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Tìm theo mã đơn (VD: A1B2C3D4)"
+          className="w-full px-4 py-2.5 rounded-full text-sm bg-white border border-[#b8deff] outline-none placeholder:text-[#4A4A6A]/30 text-[#4A4A6A] focus:border-[#8B98E3] transition-colors"
+        />
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery("")}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#4A4A6A]/30 hover:text-[#4A4A6A] text-sm"
+          >
+            ×
+          </button>
+        )}
+      </div>
       {/* Filter */}
       <div className="flex gap-3 flex-wrap">
         {["Tất cả", ...statusOptions].map((status) => (
@@ -105,17 +170,34 @@ const Orders = () => {
                   {order.total.toLocaleString()} đ
                 </p>
 
+                {order.status === "Đang xử lý" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setConfirmTarget(order);
+                    }}
+                    className="text-xs px-3 py-1.5 rounded-full font-medium bg-[#C9A0FF] text-white hover:bg-[#b98cf0] transition-colors"
+                  >
+                    ✅ Xác nhận
+                  </button>
+                )}
+
                 <select
                   value={order.status}
                   onClick={(e) => e.stopPropagation()}
                   onChange={(e) => updateStatus(order._id, e.target.value)}
                   className={`text-xs px-3 py-1.5 rounded-full font-medium outline-none cursor-pointer ${statusColor_order[order.status]}`}
                 >
-                  {statusOptions.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
+                  {statusOptions
+                    .filter(
+                      (s) =>
+                        s !== "Đã xác nhận" || order.status === "Đã xác nhận",
+                    )
+                    .map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
                 </select>
 
                 <span className="text-[#4A4A6A]/30 text-xs">
@@ -191,11 +273,34 @@ const Orders = () => {
           <div className="text-center py-16 bg-white rounded-3xl border border-[#FFD6E0]/50">
             <span className="text-4xl">📦</span>
             <p className="text-sm text-[#4A4A6A]/40 mt-3">
-              Không có đơn hàng nào
+              {searchQuery
+                ? `Không tìm thấy đơn hàng nào khớp "${searchQuery}"`
+                : "Không có đơn hàng nào"}
             </p>
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        open={!!confirmTarget}
+        title="Xác nhận đơn hàng"
+        message={
+          confirmTarget
+            ? `Xác nhận đơn #${confirmTarget._id.slice(-8).toUpperCase()} của ${
+                confirmTarget.user?.name || confirmTarget.guestEmail || "khách"
+              }?`
+            : ""
+        }
+        confirmLabel="Xác nhận"
+        cancelLabel="Huỷ"
+        loading={confirming}
+        checkbox={{
+          label: "Gửi email thông báo cho khách",
+          defaultChecked: false,
+        }}
+        onConfirm={handleConfirmOrder}
+        onCancel={() => setConfirmTarget(null)}
+      />
     </div>
   );
 };

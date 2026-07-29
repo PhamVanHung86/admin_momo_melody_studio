@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import CustomerDetailModal from "../components/CustomerDetailModal";
 import { ALL_COLUMNS, SORT_OPTIONS } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+import TableSkeleton from "../components/TableSkeleton";
+import { handleApiError } from "../utils/handleError";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -18,13 +21,13 @@ const Customers = () => {
 
   const fetchCustomers = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/users", {
+      const res = await apiFetch("/api/users", {
         credentials: "include",
       });
       const data = await res.json();
       if (data.success) setCustomers(data.customers);
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Không thể tải danh sách khách hàng");
     } finally {
       setLoading(false);
     }
@@ -43,15 +46,12 @@ const Customers = () => {
   const saveNickname = async (e, id) => {
     e.stopPropagation();
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/users/${id}/nickname`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ nickname: nicknameInput }),
-        },
-      );
+      const res = await apiFetch(`/api/users/${id}/nickname`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ nickname: nicknameInput }),
+      });
       const data = await res.json();
       if (data.success) {
         setCustomers((prev) =>
@@ -61,7 +61,7 @@ const Customers = () => {
         );
       }
     } catch (err) {
-      console.error(err);
+      handleApiError(err, "Lưu biệt danh thất bại");
     } finally {
       setEditingId(null);
     }
@@ -105,11 +105,7 @@ const Customers = () => {
   });
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-[#4A4A6A]/40 text-sm">Đang tải khách hàng...</p>
-      </div>
-    );
+    return <TableSkeleton rows={12} />;
   }
 
   return (

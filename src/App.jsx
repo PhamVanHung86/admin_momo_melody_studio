@@ -15,6 +15,7 @@ import Banner from "./pages/Banner";
 import Messages from "./pages/Messages";
 import MailClubManager from "./pages/MailClubManager";
 import MailClubCollections from "./pages/MailClubCollections";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   const { user, loading } = useAuth();
@@ -60,6 +61,7 @@ const App = () => {
               path="/mail-club-collections"
               element={<MailClubCollections />}
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>

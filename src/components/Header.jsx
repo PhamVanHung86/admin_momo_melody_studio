@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import NotificationBell from "./NotificationBell";
 
 const titles = {
   "/dashboard": "Dashboard",
@@ -18,6 +19,7 @@ const Header = () => {
         {titles[pathname] || "Admin"}
       </h2>
       <div className="flex items-center gap-3">
+        <NotificationBell />
         <div className="w-8 h-8 rounded-full bg-[#b8deff] flex items-center justify-center text-sm">
           👤
         </div>

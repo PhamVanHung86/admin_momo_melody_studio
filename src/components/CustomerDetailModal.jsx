@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { statusColor_order } from "../constansts/mailClubData";
+import { apiFetch } from "../api/client";
+import { handleApiError } from "../utils/handleError";
 
 const CustomerDetailModal = ({ customerId, onClose }) => {
   const [customer, setCustomer] = useState(null);
@@ -8,16 +10,13 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:4000/api/users/${customerId}`,
-          {
-            credentials: "include",
-          },
-        );
+        const res = await apiFetch(`/api/users/${customerId}`, {
+          credentials: "include",
+        });
         const data = await res.json();
         if (data.success) setCustomer(data.customer);
       } catch (err) {
-        console.error(err);
+        handleApiError(err, "Không thể tải chi tiết khách hàng");
       } finally {
         setLoading(false);
       }
@@ -116,13 +115,13 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                     <div className="flex justify-between">
                       <span className="text-[#4A4A6A]/50">Số điện thoại</span>
                       <span className="text-[#4A4A6A] font-medium">
-                        {latestOrder?.shippingInfo?.phone || "Chưa có"}
+                        {customer.phone || latestOrder?.shippingInfo?.phone || "Chưa có"}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#4A4A6A]/50">Địa chỉ</span>
                       <span className="text-[#4A4A6A] font-medium text-right max-w-[60%]">
-                        {latestOrder?.shippingInfo?.address || "Chưa có"}
+                        {customer.address || latestOrder?.shippingInfo?.address || "Chưa có"}
                       </span>
                     </div>
                     <div className="flex justify-between">
