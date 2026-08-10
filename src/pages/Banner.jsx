@@ -31,7 +31,6 @@ const Banners = () => {
   const fetchBanners = async () => {
     try {
       const res = await apiFetch("/api/banners", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setBanners(data.banners);
@@ -68,7 +67,6 @@ const Banners = () => {
 
       const res = await apiFetch("/api/banners", {
         method: "POST",
-        credentials: "include",
         body: formData,
       });
 
@@ -102,7 +100,6 @@ const Banners = () => {
       await apiFetch(`/api/banners/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ active: !current }),
       });
       fetchBanners();
@@ -132,7 +129,6 @@ const Banners = () => {
     try {
       await apiFetch(`/api/banners/${deleteTarget._id}`, {
         method: "DELETE",
-        credentials: "include",
       });
       toast.success("Xóa banner thành công! 🗑️");
       closeDeleteModal();

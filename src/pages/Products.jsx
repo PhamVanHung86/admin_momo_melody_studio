@@ -55,7 +55,6 @@ const Products = () => {
     try {
       const res = await apiFetch(`/api/products/${deleteTarget._id}`, {
         method: "DELETE",
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) {
@@ -117,8 +116,8 @@ const Products = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-hidden">
-        <table className="w-full">
+      <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-x-auto">
+        <table className="w-full min-w-[720px]">
           <thead>
             <tr className="border-b border-[#FFD6E0]/50">
               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">

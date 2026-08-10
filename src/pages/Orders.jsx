@@ -18,7 +18,6 @@ const Orders = () => {
   const fetchOrders = async () => {
     try {
       const res = await apiFetch("/api/orders", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setOrders(data.orders);
@@ -44,7 +43,6 @@ const Orders = () => {
       const res = await apiFetch(`/api/orders/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ status }),
       });
       const data = await res.json();
@@ -66,7 +64,6 @@ const Orders = () => {
       const res = await apiFetch(`/api/orders/${confirmTarget._id}/confirm`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ sendEmail }),
       });
       const data = await res.json();
@@ -152,7 +149,7 @@ const Orders = () => {
               onClick={() =>
                 setExpandedId(expandedId === order._id ? null : order._id)
               }
-              className="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#FFFAF5] transition-colors"
+              className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 sm:justify-between px-4 sm:px-6 py-4 cursor-pointer hover:bg-[#FFFAF5] transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div>
@@ -165,7 +162,7 @@ const Orders = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center flex-wrap gap-2 sm:gap-4">
                 <p className="text-sm font-semibold text-[#448ecf]">
                   {order.total.toLocaleString()} đ
                 </p>

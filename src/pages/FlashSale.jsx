@@ -27,7 +27,6 @@ const FlashSale = () => {
     try {
       const [salesRes, productsRes] = await Promise.all([
         apiFetch("/api/flash-sales", {
-          credentials: "include",
         }),
         apiFetch("/api/products"),
       ]);
@@ -71,7 +70,6 @@ const FlashSale = () => {
       const res = await apiFetch("/api/flash-sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify(form),
       });
       const data = await res.json();
@@ -113,7 +111,6 @@ const FlashSale = () => {
     try {
       await apiFetch(`/api/flash-sales/${deleteTarget._id}`, {
         method: "DELETE",
-        credentials: "include",
       });
       toast.success("Đã xóa chiến dịch flash sale! 🗑️");
       closeDeleteModal();

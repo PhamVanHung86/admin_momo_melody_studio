@@ -94,7 +94,6 @@ const EditProduct = () => {
 
       const res = await apiFetch(`/api/products/${id}`, {
         method: "PUT",
-        credentials: "include",
         body: formData,
       });
 

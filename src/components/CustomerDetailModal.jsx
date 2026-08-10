@@ -11,7 +11,6 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
     const fetchDetail = async () => {
       try {
         const res = await apiFetch(`/api/users/${customerId}`, {
-          credentials: "include",
         });
         const data = await res.json();
         if (data.success) setCustomer(data.customer);

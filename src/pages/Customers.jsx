@@ -22,7 +22,6 @@ const Customers = () => {
   const fetchCustomers = async () => {
     try {
       const res = await apiFetch("/api/users", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setCustomers(data.customers);
@@ -49,7 +48,6 @@ const Customers = () => {
       const res = await apiFetch(`/api/users/${id}/nickname`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ nickname: nicknameInput }),
       });
       const data = await res.json();

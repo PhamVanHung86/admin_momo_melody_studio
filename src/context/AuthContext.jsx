@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { apiFetch } from "../api/client";
+import { apiFetch, setTokens, getRefreshToken, removeToken } from "../api/client";
 
 export const AuthContext = createContext();
 
@@ -13,14 +13,13 @@ const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const res = await apiFetch("/api/auth/me", {
-        credentials: "include",
-      });
+      const res = await apiFetch("/api/auth/me");
       const data = await res.json();
       if (data.success && data.user.role === "admin") {
         setUser(data.user);
       } else {
         setUser(null); // Không phải admin thì không cho vào
+        if (data.success && data.user.role !== "admin") removeToken();
       }
     } catch {
       setUser(null);
@@ -32,12 +31,11 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await apiFetch("/api/auth/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
     if (data.success && data.user.role === "admin") {
+      setTokens(data);
       setUser(data.user);
     } else if (data.success && data.user.role !== "admin") {
       return { success: false, message: "Tài khoản không có quyền admin" };
@@ -48,8 +46,9 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     await apiFetch("/api/auth/logout", {
       method: "POST",
-      credentials: "include",
+      body: JSON.stringify({ refreshToken: getRefreshToken() }),
     });
+    removeToken();
     setUser(null);
   };
 

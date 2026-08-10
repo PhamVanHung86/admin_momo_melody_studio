@@ -66,7 +66,6 @@ const MailClubManager = () => {
   const fetchSettings = async () => {
     try {
       const res = await apiFetch("/api/mail-club-settings", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) {
@@ -88,7 +87,6 @@ const MailClubManager = () => {
   const fetchSubs = async (status = "all") => {
     try {
       const res = await apiFetch(`/api/mail-club?status=${status}`, {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setSubscriptions(data.subscriptions);
@@ -113,7 +111,6 @@ const MailClubManager = () => {
       const res = await apiFetch("/api/mail-club-settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
           ...settingsForm,
           closeAt: settingsForm.closeAt || null,
@@ -136,7 +133,6 @@ const MailClubManager = () => {
       const res = await apiFetch(`/api/mail-club/${id}/confirm`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ note: adminNote }),
       });
       const data = await res.json();
@@ -157,7 +153,6 @@ const MailClubManager = () => {
       const res = await apiFetch(`/api/mail-club/${id}/renew`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ plan: renewPlan, note: adminNote }),
       });
       const data = await res.json();
@@ -179,7 +174,6 @@ const MailClubManager = () => {
       await apiFetch(`/api/mail-club/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ status: "cancelled" }),
       });
       fetchSubs(statusFilter);
@@ -194,7 +188,6 @@ const MailClubManager = () => {
     try {
       const res = await apiFetch("/api/mail-club/send-reminders", {
         method: "POST",
-        credentials: "include",
       });
       const data = await res.json();
       setActionResult(data.message);
@@ -237,7 +230,6 @@ const MailClubManager = () => {
       const res = await apiFetch("/api/mail-club/admin/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify(addForm),
       });
       const data = await res.json();
@@ -268,7 +260,6 @@ const MailClubManager = () => {
       const res = await apiFetch(`/api/mail-club/admin/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
           ...selectedSub,
           ...editTimeForm,
@@ -297,7 +288,6 @@ const MailClubManager = () => {
       const res = await apiFetch("/api/mail-club/send-custom-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify(emailForm),
       });
       const data = await res.json();

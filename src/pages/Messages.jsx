@@ -16,7 +16,6 @@ const Messages = () => {
   const fetchMessages = async () => {
     try {
       const res = await apiFetch("/api/contact", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setMessages(data.messages);
@@ -35,7 +34,6 @@ const Messages = () => {
     try {
       await apiFetch(`/api/contact/${id}/read`, {
         method: "PUT",
-        credentials: "include",
       });
       setMessages((prev) =>
         prev.map((m) => (m._id === id ? { ...m, read: true } : m)),
@@ -66,7 +64,6 @@ const Messages = () => {
     try {
       await apiFetch(`/api/contact/${deleteTarget._id}`, {
         method: "DELETE",
-        credentials: "include",
       });
       setMessages((prev) => prev.filter((m) => m._id !== deleteTarget._id));
       toast.success("Đã xóa tin nhắn! 🗑️");

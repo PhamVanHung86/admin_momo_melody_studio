@@ -33,7 +33,6 @@ const Dashboard = () => {
     setIsUploading(true);
     try {
       const res = await apiFetch("/api/mail-club/stats", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setMailClubStats(data.stats);
@@ -46,7 +45,6 @@ const Dashboard = () => {
     setIsUploading(true);
     try {
       const res = await apiFetch("/api/orders/dashboard-stats", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setStats(data.stats);
@@ -61,7 +59,6 @@ const Dashboard = () => {
       const res = await apiFetch(
         `/api/orders/analytics?period=${selectedPeriod}`,
         {
-          credentials: "include",
         },
       );
       const data = await res.json();

@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 
 const App = () => {
   const { user, loading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   if (loading) {
     return (
@@ -39,12 +40,12 @@ const App = () => {
   return (
     <div className="flex min-h-screen bg-[#FFFAF5]">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col ml-64">
-        <Header />
-        <main className="flex-1 px-8 py-6">
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
+        <Header onMenuClick={() => setSidebarOpen(true)} />
+        <main className="flex-1 px-4 md:px-8 py-6 overflow-x-hidden">
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={<Dashboard />} />

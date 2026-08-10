@@ -53,7 +53,6 @@ const MailClubCollections = () => {
   const fetchCollections = async () => {
     try {
       const res = await apiFetch("/api/mail-club-collections/admin", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setCollections(data.collections);
@@ -94,7 +93,6 @@ const MailClubCollections = () => {
     try {
       const res = await apiFetch("/api/mail-club-collections", {
         method: "POST",
-        credentials: "include",
         body: formData,
       });
       const data = await res.json();
@@ -136,7 +134,6 @@ const MailClubCollections = () => {
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
           body: JSON.stringify({
             title: editForm.title,
             month: Number(editForm.month),
@@ -174,7 +171,6 @@ const MailClubCollections = () => {
     try {
       const res = await apiFetch(`/api/mail-club-collections/${id}/images`, {
         method: "POST",
-        credentials: "include",
         body: formData,
       });
       const data = await res.json();
@@ -218,7 +214,6 @@ const MailClubCollections = () => {
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
           body: JSON.stringify({ imageUrl }),
         },
       );
@@ -241,7 +236,6 @@ const MailClubCollections = () => {
       await apiFetch(`/api/mail-club-collections/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ active: !current }),
       });
       fetchCollections();
@@ -275,7 +269,6 @@ const MailClubCollections = () => {
         `/api/mail-club-collections/${deleteTarget._id}`,
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
       const data = await res.json();

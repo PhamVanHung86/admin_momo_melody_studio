@@ -79,7 +79,6 @@ const AddProduct = () => {
 
       const res = await apiFetch("/api/products", {
         method: "POST",
-        credentials: "include",
         body: formData,
       });
 

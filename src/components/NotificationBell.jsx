@@ -14,7 +14,6 @@ const NotificationBell = () => {
   const fetchPendingCount = useCallback(async () => {
     try {
       const res = await apiFetch("/api/orders/pending-count", {
-        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setPendingCount(data.count);
