@@ -10,8 +10,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await apiFetch(`/api/users/${customerId}`, {
-        });
+        const res = await apiFetch(`/api/users/${customerId}`, {});
         const data = await res.json();
         if (data.success) setCustomer(data.customer);
       } catch (err) {
@@ -114,13 +113,17 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                     <div className="flex justify-between">
                       <span className="text-[#4A4A6A]/50">Số điện thoại</span>
                       <span className="text-[#4A4A6A] font-medium">
-                        {customer.phone || latestOrder?.shippingInfo?.phone || "Chưa có"}
+                        {customer.phone ||
+                          latestOrder?.shippingInfo?.phone ||
+                          "Chưa có"}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#4A4A6A]/50">Địa chỉ</span>
                       <span className="text-[#4A4A6A] font-medium text-right max-w-[60%]">
-                        {customer.address || latestOrder?.shippingInfo?.address || "Chưa có"}
+                        {customer.address ||
+                          latestOrder?.shippingInfo?.address ||
+                          "Chưa có"}
                       </span>
                     </div>
                     <div className="flex justify-between">
