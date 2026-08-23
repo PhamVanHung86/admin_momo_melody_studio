@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { apiFetch } from "../api/client";
 import toast from "react-hot-toast";
 import { handleApiError } from "../utils/handleError";
+import Pagination from "../components/Pagination";
+import { useClientPagination } from "../utils/useClientPagination";
 
 // Import 7 Sub-components
 import SettingsPanel from "../components/mailclub/SettingsPanel";
@@ -11,6 +13,8 @@ import SubscriptionDetailModal from "../components/mailclub/SubscriptionDetailMo
 import AddSubscriberModal from "../components/mailclub/AddSubscriberModal";
 import EditSubscriberModal from "../components/mailclub/EditSubscriberModal";
 import CustomEmailModal from "../components/mailclub/CustomEmailModal";
+import ConfirmModal from "../components/ConfirmModal";
+import NewCyclePreviewModal from "../components/mailclub/NewCyclePreviewModal";
 
 const MailClubManager = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -25,6 +29,22 @@ const MailClubManager = () => {
   const [actionResult, setActionResult] = useState("");
   const [settings, setSettings] = useState(null);
 
+  // Xem trước & xác nhận trước khi mở kỳ mail club tháng mới
+  const [showNewCycleModal, setShowNewCycleModal] = useState(false);
+  const [newCycleLoading, setNewCycleLoading] = useState(false);
+  const [newCycleData, setNewCycleData] = useState(null);
+  const [newCycleForm, setNewCycleForm] = useState({
+    subject: "",
+    message: "",
+    excludeIds: [],
+  });
+  const [newCycleConfirming, setNewCycleConfirming] = useState(false);
+  const [newCycleResult, setNewCycleResult] = useState("");
+
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancelTargetId, setCancelTargetId] = useState(null);
+  const [isCancelling, setIsCancelling] = useState(false);
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditTime, setShowEditTime] = useState(false);
   const [addForm, setAddForm] = useState({
@@ -37,12 +57,14 @@ const MailClubManager = () => {
     startDate: "",
     endDate: "",
     adminNote: "",
+    remainingTurns: "",
   });
   const [editTimeForm, setEditTimeForm] = useState({
     startDate: "",
     endDate: "",
     status: "",
     adminNote: "",
+    remainingTurns: "",
   });
   const [settingsForm, setSettingsForm] = useState({
     isOpen: false,
@@ -65,8 +87,7 @@ const MailClubManager = () => {
 
   const fetchSettings = async () => {
     try {
-      const res = await apiFetch("/api/mail-club-settings", {
-      });
+      const res = await apiFetch("/api/mail-club-settings", {});
       const data = await res.json();
       if (data.success) {
         setSettings(data.settings);
@@ -86,8 +107,7 @@ const MailClubManager = () => {
 
   const fetchSubs = async (status = "all") => {
     try {
-      const res = await apiFetch(`/api/mail-club?status=${status}`, {
-      });
+      const res = await apiFetch(`/api/mail-club?status=${status}`, {});
       const data = await res.json();
       if (data.success) setSubscriptions(data.subscriptions);
     } catch (err) {
@@ -168,40 +188,90 @@ const MailClubManager = () => {
     }
   };
 
-  const cancelSub = async (id) => {
-    if (!confirm("Hủy subscription này?")) return;
+  // 1. Mở modal xác nhận huỷ (thay cho window.confirm)
+  const cancelSub = (id) => {
+    setCancelTargetId(id);
+    setCancelModalOpen(true);
+  };
+
+  // 2. Đóng modal huỷ
+  const closeCancelModal = () => {
+    if (isCancelling) return;
+    setCancelModalOpen(false);
+    setCancelTargetId(null);
+  };
+
+  // 3. Thực thi huỷ sau khi bấm nút Xác nhận trên Modal
+  const handleConfirmCancel = async () => {
+    if (!cancelTargetId) return;
+
+    setIsCancelling(true);
     try {
-      await apiFetch(`/api/mail-club/${id}`, {
+      await apiFetch(`/api/mail-club/${cancelTargetId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "cancelled" }),
       });
+      toast.success("Đã huỷ subscription!");
       fetchSubs(statusFilter);
       setShowModal(false);
+      closeCancelModal();
     } catch (err) {
       handleApiError(err, "Huỷ gói thất bại");
+    } finally {
+      setIsCancelling(false);
     }
   };
 
-  const sendReminders = async () => {
-    setSending(true);
+  // Bước 1: Mở modal xem trước nội dung + danh sách người nhận (chưa gửi gì cả)
+  const openNewCyclePreview = async () => {
+    setShowNewCycleModal(true);
+    setNewCycleLoading(true);
+    setNewCycleResult("");
     try {
-      const res = await apiFetch("/api/mail-club/send-reminders", {
+      const res = await apiFetch("/api/mail-club/new-cycle/preview");
+      const data = await res.json();
+      setNewCycleData(data);
+      setNewCycleForm({
+        subject: data.subject || "",
+        message: data.message || "",
+        excludeIds: [],
+      });
+    } catch (err) {
+      handleApiError(err, "Không tải được nội dung xem trước");
+      setShowNewCycleModal(false);
+    } finally {
+      setNewCycleLoading(false);
+    }
+  };
+
+  // Bước 2: Admin đã xem/chỉnh sửa xong, bấm xác nhận thì lúc này mới thật sự gửi
+  const confirmNewCycle = async () => {
+    setNewCycleConfirming(true);
+    try {
+      const res = await apiFetch("/api/mail-club/new-cycle/confirm", {
         method: "POST",
+        body: JSON.stringify({
+          subject: newCycleForm.subject,
+          message: newCycleForm.message,
+          excludeIds: newCycleForm.excludeIds,
+        }),
       });
       const data = await res.json();
+      setNewCycleResult(data.message);
       setActionResult(data.message);
-      setTimeout(() => setActionResult(""), 4000);
+      fetchSubs(statusFilter);
+      setTimeout(() => {
+        setShowNewCycleModal(false);
+        setNewCycleResult("");
+        setActionResult("");
+      }, 2500);
     } catch (err) {
       handleApiError(err, "Gửi email nhắc gia hạn thất bại");
+      setNewCycleResult("Lỗi: gửi email thất bại");
     } finally {
-      setSending(false);
+      setNewCycleConfirming(false);
     }
-  };
-
-  const getDaysLeft = (endDate) => {
-    const diff = new Date(endDate) - new Date();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
   };
 
   const filtered = subscriptions.filter(
@@ -211,13 +281,13 @@ const MailClubManager = () => {
       s.phone.includes(search),
   );
 
+  const { page, setPage, totalPages, total, pageSize, pageItems } =
+    useClientPagination(filtered, 8);
+
   const counts = {
     pending: subscriptions.filter((s) => s.status === "pending").length,
     expiring: subscriptions.filter(
-      (s) =>
-        s.status === "active" &&
-        getDaysLeft(s.endDate) <= 7 &&
-        getDaysLeft(s.endDate) > 0,
+      (s) => s.status === "active" && s.remainingTurns === 0,
     ).length,
   };
 
@@ -227,11 +297,22 @@ const MailClubManager = () => {
       return;
     }
     try {
+      // Tạo 1 bản sao của addForm để không sửa trực tiếp state gốc
+      const payload = { ...addForm };
+
+      // Nếu ô "Lượt còn lại" đang để trống ("") thì xóa field này
+      // khỏi payload — để backend tự tính mặc định theo gói
+      if (payload.remainingTurns === "") {
+        delete payload.remainingTurns;
+      }
+
+      // Gửi payload (đã xử lý) thay vì addForm (dữ liệu gốc chưa xử lý)
       const res = await apiFetch("/api/mail-club/admin/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(addForm),
+        body: JSON.stringify(payload),
       });
+
       const data = await res.json();
       if (data.success) {
         setShowAddForm(false);
@@ -244,14 +325,16 @@ const MailClubManager = () => {
           status: "active",
           startDate: "",
           endDate: "",
+          remainingTurns: "",
           adminNote: "",
         });
+        toast.success("Đã thêm subscriber!");
         fetchSubs(statusFilter);
-        setActionResult("✅ Đã thêm subscriber thành công!");
-        setTimeout(() => setActionResult(""), 3000);
+      } else {
+        toast.error(data.message || "Có lỗi xảy ra");
       }
-    } catch (err) {
-      handleApiError(err, "Tạo thành viên thất bại");
+    } catch {
+      toast.error("Lỗi kết nối server");
     }
   };
 
@@ -345,23 +428,30 @@ const MailClubManager = () => {
         search={search}
         setSearch={setSearch}
         onOpenAddForm={() => setShowAddForm(true)}
-        onSendReminders={sendReminders}
-        sending={sending}
+        onSendReminders={openNewCyclePreview}
+        sending={newCycleLoading}
         onOpenEmailModal={() => setShowEmailModal(true)}
       />
 
       {/* 3. Bảng dữ liệu & Lọc tab trạng thái */}
       <SubscriptionTable
-        filteredSubscriptions={filtered}
+        filteredSubscriptions={pageItems}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
-        getDaysLeft={getDaysLeft}
         onSelectSub={(sub) => {
           setSelectedSub(sub);
           setRenewPlan(sub.plan);
           setAdminNote(sub.adminNote || "");
           setShowModal(true);
         }}
+      />
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        pageSize={pageSize}
+        onPageChange={setPage}
       />
 
       {/* 4. Modal Chi tiết Subscriber */}
@@ -392,6 +482,7 @@ const MailClubManager = () => {
                 ? new Date(selectedSub.endDate).toISOString().slice(0, 10)
                 : "",
               adminNote: selectedSub.adminNote || "",
+              remainingTurns: selectedSub.remainingTurns ?? 0,
             });
             setShowEditTime(true);
           }}
@@ -427,6 +518,31 @@ const MailClubManager = () => {
         emailResult={emailResult}
         subscriptions={subscriptions}
         onSubmit={sendCustomEmail}
+      />
+
+      {/* 8. Modal Xem trước & Xác nhận mở kỳ Mail Club tháng mới */}
+      <NewCyclePreviewModal
+        isOpen={showNewCycleModal}
+        onClose={() => setShowNewCycleModal(false)}
+        loading={newCycleLoading}
+        data={newCycleData}
+        form={newCycleForm}
+        setForm={setNewCycleForm}
+        confirming={newCycleConfirming}
+        confirmResult={newCycleResult}
+        onConfirm={confirmNewCycle}
+      />
+
+      <ConfirmModal
+        open={cancelModalOpen}
+        title="Huỷ subscription"
+        message="Bạn có chắc chắn muốn huỷ subscription này không? Hành động này không thể hoàn tác."
+        confirmLabel="Huỷ subscription"
+        cancelLabel="Đóng"
+        danger={true}
+        loading={isCancelling}
+        onConfirm={handleConfirmCancel}
+        onCancel={closeCancelModal}
       />
     </div>
   );

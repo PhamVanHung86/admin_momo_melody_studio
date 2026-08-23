@@ -58,7 +58,7 @@ src/
   api/            # lớp gọi API tập trung (client.js)
   components/     # component dùng chung (Sidebar, Header, ErrorBoundary...)
   context/        # AuthContext (quản lý phiên đăng nhập admin)
-  constansts/     # hằng số dùng chung (danh mục, màu trạng thái...)
+  constants/     # hằng số dùng chung (danh mục, màu trạng thái...)
   pages/          # các trang theo route (Dashboard, Products, Orders...)
 ```
 

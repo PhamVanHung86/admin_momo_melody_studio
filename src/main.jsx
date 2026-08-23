@@ -18,14 +18,14 @@ createRoot(document.getElementById("root")).render(
             style: {
               background: "#FFFAF5",
               color: "#4A4A6A",
-              border: "1px solid #FFD6E0",
+              border: "1px solid #CBD1F2",
               borderRadius: "12px",
               fontSize: "14px",
               fontWeight: "500",
             },
             success: {
               iconTheme: {
-                primary: "#FFB7C5",
+                primary: "#8B98E3",
                 secondary: "#FFF",
               },
             },

@@ -26,8 +26,7 @@ const FlashSale = () => {
   const fetchData = async () => {
     try {
       const [salesRes, productsRes] = await Promise.all([
-        apiFetch("/api/flash-sales", {
-        }),
+        apiFetch("/api/flash-sales", {}),
         apiFetch("/api/products"),
       ]);
       const salesData = await salesRes.json();
@@ -164,7 +163,7 @@ const FlashSale = () => {
         {flashSales.map((sale) => (
           <div
             key={sale._id}
-            className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50"
+            className="bg-white rounded-3xl p-6 border border-[#CBD1F2]/50"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
@@ -195,7 +194,7 @@ const FlashSale = () => {
               </button>
             </div>
 
-            <p className="text-2xl font-bold text-[#FFB7C5] mb-3">
+            <p className="text-2xl font-bold text-[#8B98E3] mb-3">
               -{sale.discountPercent}%
             </p>
 
@@ -224,7 +223,7 @@ const FlashSale = () => {
         ))}
 
         {flashSales.length === 0 && (
-          <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 text-center py-16">
+          <div className="bg-white rounded-3xl border border-[#CBD1F2]/50 text-center py-16">
             <span className="text-4xl">⚡</span>
             <p className="text-sm text-[#4A4A6A]/40 mt-3">
               Chưa có flash sale nào
@@ -257,7 +256,7 @@ const FlashSale = () => {
                       setForm({ ...form, title: e.target.value })
                     }
                     placeholder="VD: Sale 6.6 — Giảm sốc!"
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                   />
                 </div>
 
@@ -272,7 +271,7 @@ const FlashSale = () => {
                       setForm({ ...form, discountPercent: e.target.value })
                     }
                     placeholder="20"
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                   />
                 </div>
 
@@ -285,7 +284,7 @@ const FlashSale = () => {
                       onChange={(e) =>
                         setForm({ ...form, startTime: e.target.value })
                       }
-                      className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                      className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
@@ -298,7 +297,7 @@ const FlashSale = () => {
                       onChange={(e) =>
                         setForm({ ...form, endTime: e.target.value })
                       }
-                      className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                      className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                     />
                   </div>
                 </div>
@@ -307,7 +306,7 @@ const FlashSale = () => {
                   <label className="text-xs text-[#4A4A6A]/60">
                     Chọn sản phẩm áp dụng ({form.products.length} đã chọn)
                   </label>
-                  <div className="border border-[#FFD6E0] rounded-xl p-3 max-h-48 overflow-y-auto flex flex-col gap-1">
+                  <div className="border border-[#CBD1F2] rounded-xl p-3 max-h-48 overflow-y-auto flex flex-col gap-1">
                     {products.map((p) => (
                       <label
                         key={p._id}
@@ -317,7 +316,7 @@ const FlashSale = () => {
                           type="checkbox"
                           checked={form.products.includes(p._id)}
                           onChange={() => toggleProduct(p._id)}
-                          className="accent-[#FFB7C5]"
+                          className="accent-[#8B98E3]"
                         />
                         <img
                           src={p.images?.[0]}
@@ -326,7 +325,7 @@ const FlashSale = () => {
                         />
                         <div className="flex-1">
                           <p className="text-sm text-[#4A4A6A]">{p.name}</p>
-                          <p className="text-xs text-[#FFB7C5]">
+                          <p className="text-xs text-[#8B98E3]">
                             {p.price.toLocaleString()} đ
                           </p>
                         </div>
@@ -339,13 +338,13 @@ const FlashSale = () => {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowForm(false)}
-                  className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5] transition-colors"
+                  className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9] transition-colors"
                 >
                   Hủy
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="flex-1 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5] transition-colors"
+                  className="flex-1 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3] transition-colors"
                 >
                   Tạo chiến dịch ⚡
                 </button>

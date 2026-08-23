@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { CATEGORIES } from "../constansts/mailClubData";
+import { CATEGORIES } from "../constants/mailClubData";
 import { apiFetch } from "../api/client";
 import { handleApiError } from "../utils/handleError";
 
@@ -135,7 +135,7 @@ const EditProduct = () => {
   return (
     <div className="max-w-3xl flex flex-col gap-6">
       {/* Ảnh hiện tại */}
-      <div className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50">
+      <div className="bg-white rounded-3xl p-6 border border-[#CBD1F2]/50">
         <h3 className="text-sm font-semibold text-[#4A4A6A] mb-5">
           Ảnh hiện tại
         </h3>
@@ -186,7 +186,7 @@ const EditProduct = () => {
       </div>
 
       {/* Thông tin */}
-      <div className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50 flex flex-col gap-5">
+      <div className="bg-white rounded-3xl p-6 border border-[#CBD1F2]/50 flex flex-col gap-5">
         <h3 className="text-sm font-semibold text-[#4A4A6A]">
           Thông tin sản phẩm
         </h3>
@@ -276,14 +276,14 @@ const EditProduct = () => {
       <div className="flex gap-3">
         <button
           onClick={() => navigate("/products")}
-          className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5] transition-colors"
+          className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9] transition-colors"
         >
           Hủy
         </button>
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="flex-1 py-3 rounded-2xl bg-[#b8deff] text-white text-sm font-semibold hover:bg-[#ff9db5] transition-colors disabled:opacity-50"
+          className="flex-1 py-3 rounded-2xl bg-[#b8deff] text-white text-sm font-semibold hover:bg-[#8B98E3] transition-colors disabled:opacity-50"
         >
           {loading ? "Đang lưu..." : "Cập nhật sản phẩm 🌸"}
         </button>

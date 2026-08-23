@@ -6,10 +6,10 @@ export default function PageLoader({ message = "Đang chuẩn bị trang..." }) 
       {/* Cụm hiệu ứng trung tâm */}
       <div className="relative flex items-center justify-center mb-5">
         {/* Vòng tròn hiệu ứng sóng lan (Ping effect) */}
-        <div className="absolute w-20 h-20 bg-[#FFB7C5]/30 rounded-full animate-ping" />
+        <div className="absolute w-20 h-20 bg-[#8B98E3]/30 rounded-full animate-ping" />
 
         {/* Vòng xoay Pastel Spinner */}
-        <div className="w-16 h-16 border-4 border-t-[#8B98E3] border-r-[#FFB7C5] border-b-[#FFD6E0] border-l-transparent rounded-full animate-spin" />
+        <div className="w-16 h-16 border-4 border-t-[#8B98E3] border-r-[#8B98E3] border-b-[#CBD1F2] border-l-transparent rounded-full animate-spin" />
 
         {/* Icon hoa/trái tim nhún nhảy ở giữa */}
         <span className="absolute text-2xl select-none animate-bounce">🌸</span>
@@ -28,7 +28,7 @@ export default function PageLoader({ message = "Đang chuẩn bị trang..." }) 
         <span>{message}</span>
         <div className="flex gap-1 items-center">
           <span className="w-1.5 h-1.5 bg-[#8B98E3] rounded-full animate-bounce [animation-delay:-0.3s]" />
-          <span className="w-1.5 h-1.5 bg-[#FFB7C5] rounded-full animate-bounce [animation-delay:-0.15s]" />
+          <span className="w-1.5 h-1.5 bg-[#8B98E3] rounded-full animate-bounce [animation-delay:-0.15s]" />
           <span className="w-1.5 h-1.5 bg-[#8B98E3] rounded-full animate-bounce" />
         </div>
       </div>

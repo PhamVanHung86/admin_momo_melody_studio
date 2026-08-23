@@ -3,13 +3,12 @@ import {
   STATUS_FILTERS,
   statusColor,
   statusLabel,
-} from "../../constansts/mailClubData";
+} from "../../constants/mailClubData";
 
 const SubscriptionTable = ({
   filteredSubscriptions,
   statusFilter,
   setStatusFilter,
-  getDaysLeft,
   onSelectSub,
 }) => {
   return (
@@ -22,8 +21,8 @@ const SubscriptionTable = ({
             onClick={() => setStatusFilter(f.value)}
             className={`text-xs px-4 py-2 rounded-full font-medium transition-all ${
               statusFilter === f.value
-                ? "bg-[#FFB7C5] text-white"
-                : "bg-white text-[#4A4A6A]/60 border border-[#FFD6E0] hover:border-[#FFB7C5]"
+                ? "bg-[#8B98E3] text-white"
+                : "bg-white text-[#4A4A6A]/60 border border-[#CBD1F2] hover:border-[#8B98E3]"
             }`}
           >
             {f.label}
@@ -32,10 +31,10 @@ const SubscriptionTable = ({
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-x-auto">
+      <div className="bg-white rounded-3xl border border-[#CBD1F2]/50 overflow-x-auto">
         <table className="w-full min-w-[720px]">
           <thead>
-            <tr className="border-b border-[#FFD6E0]/50">
+            <tr className="border-b border-[#CBD1F2]/50">
               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
                 Khách hàng
               </th>
@@ -46,7 +45,7 @@ const SubscriptionTable = ({
                 Trạng thái
               </th>
               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
-                Hết hạn
+                Mailclub
               </th>
               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
                 Đăng ký
@@ -58,17 +57,15 @@ const SubscriptionTable = ({
           </thead>
           <tbody>
             {filteredSubscriptions.map((s) => {
-              const daysLeft = s.endDate ? getDaysLeft(s.endDate) : null;
+              // 📬 "Sắp cần đăng ký lại": vẫn active nhưng kỳ này là kỳ tự
+              // động CUỐI CÙNG (remainingTurns = 0) — kỳ sau phải đăng ký lại
               const isExpiring =
-                s.status === "active" &&
-                daysLeft !== null &&
-                daysLeft <= 7 &&
-                daysLeft > 0;
+                s.status === "active" && s.remainingTurns === 0;
 
               return (
                 <tr
                   key={s._id}
-                  className={`border-b border-[#FFD6E0]/30 last:border-0 transition-colors ${
+                  className={`border-b border-[#CBD1F2]/30 last:border-0 transition-colors ${
                     isExpiring ? "bg-orange-50" : "hover:bg-[#FFFAF5]"
                   }`}
                 >
@@ -81,7 +78,7 @@ const SubscriptionTable = ({
                   </td>
 
                   <td className="px-6 py-4">
-                    <span className="text-xs px-3 py-1 rounded-full bg-[#FFD6E0] text-[#4A4A6A] font-medium">
+                    <span className="text-xs px-3 py-1 rounded-full bg-[#CBD1F2] text-[#4A4A6A] font-medium">
                       {s.plan === "monthly" ? "🌸 Tháng" : "🎀 Quý"}
                     </span>
                   </td>
@@ -94,25 +91,21 @@ const SubscriptionTable = ({
                     </span>
                     {isExpiring && (
                       <p className="text-xs text-orange-500 mt-1">
-                        ⚠️ Còn {daysLeft} ngày
+                        ⚠️ Mailclub cuối
                       </p>
                     )}
                   </td>
 
                   <td className="px-6 py-4">
-                    {s.endDate ? (
-                      <p
-                        className={`text-sm ${
-                          daysLeft !== null && daysLeft <= 0
-                            ? "text-red-400"
-                            : "text-[#4A4A6A]"
-                        }`}
-                      >
-                        {new Date(s.endDate).toLocaleDateString("vi-VN")}
+                    {s.status === "active" ? (
+                      <p className="text-sm text-[#4A4A6A]">
+                        {s.remainingTurns > 0
+                          ? `Còn ${s.remainingTurns} Mailclub`
+                          : "Done"}
                       </p>
                     ) : (
                       <p className="text-xs text-[#4A4A6A]/30">
-                        Chưa kích hoạt
+                        {s.status === "pending" ? "Chưa kích hoạt" : "—"}
                       </p>
                     )}
                   </td>
@@ -126,7 +119,7 @@ const SubscriptionTable = ({
                   <td className="px-6 py-4">
                     <button
                       onClick={() => onSelectSub(s)}
-                      className="text-xs px-3 py-1.5 rounded-xl border border-[#FFD6E0] text-[#4A4A6A] hover:bg-[#FFD6E0] transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-xl border border-[#CBD1F2] text-[#4A4A6A] hover:bg-[#CBD1F2] transition-colors"
                     >
                       Chi tiết
                     </button>

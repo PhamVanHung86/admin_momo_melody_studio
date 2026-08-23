@@ -1,5 +1,5 @@
 import React from "react";
-import { statusColor, statusLabel } from "../../constansts/mailClubData";
+import { statusColor, statusLabel } from "../../constants/mailClubData";
 
 const SubscriptionDetailModal = ({
   selectedSub,
@@ -41,7 +41,7 @@ const SubscriptionDetailModal = ({
             </div>
             <button
               onClick={onClose}
-              className="text-[#4A4A6A]/30 hover:text-[#FFB7C5] text-2xl"
+              className="text-[#4A4A6A]/30 hover:text-[#8B98E3] text-2xl"
             >
               ×
             </button>
@@ -49,13 +49,13 @@ const SubscriptionDetailModal = ({
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mb-5">
-            <div className="bg-[#FFF0F5] rounded-2xl p-3 text-center">
+            <div className="bg-[#E8EAF9] rounded-2xl p-3 text-center">
               <p className="text-xs text-[#4A4A6A]/50 mb-1">Gói</p>
               <p className="text-sm font-semibold text-[#4A4A6A]">
                 {selectedSub.plan === "monthly" ? "Tháng" : "Quý"}
               </p>
             </div>
-            <div className="bg-[#FFF0F5] rounded-2xl p-3 text-center">
+            <div className="bg-[#E8EAF9] rounded-2xl p-3 text-center">
               <p className="text-xs text-[#4A4A6A]/50 mb-1">Trạng thái</p>
               <span
                 className={`text-xs px-2 py-0.5 rounded-full ${statusColor[selectedSub.status]}`}
@@ -63,7 +63,7 @@ const SubscriptionDetailModal = ({
                 {statusLabel[selectedSub.status]}
               </span>
             </div>
-            <div className="bg-[#FFF0F5] rounded-2xl p-3 text-center">
+            <div className="bg-[#E8EAF9] rounded-2xl p-3 text-center">
               <p className="text-xs text-[#4A4A6A]/50 mb-1">Gia hạn</p>
               <p className="text-sm font-semibold text-[#4A4A6A]">
                 {selectedSub.renewalHistory?.length || 0} lần
@@ -81,9 +81,11 @@ const SubscriptionDetailModal = ({
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#4A4A6A]/50">Hết hạn</span>
-                <span className="text-[#FFB7C5] font-semibold">
-                  {new Date(selectedSub.endDate).toLocaleDateString("vi-VN")}
+                <span className="text-[#4A4A6A]/50">Lượt tự động còn lại</span>
+                <span className="text-[#8B98E3] font-semibold">
+                  {selectedSub.remainingTurns > 0
+                    ? `${selectedSub.remainingTurns} kỳ tiếp theo`
+                    : "Đợt cuối"}
                 </span>
               </div>
             </div>
@@ -120,13 +122,13 @@ const SubscriptionDetailModal = ({
               value={adminNote}
               onChange={(e) => setAdminNote(e.target.value)}
               rows={2}
-              className="w-full border border-[#FFD6E0] rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+              className="w-full border border-[#CBD1F2] rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
             />
           </div>
 
           <button
             onClick={onOpenEditTime}
-            className="w-full py-2.5 mb-3 rounded-xl border border-[#FFD6E0] text-[#4A4A6A] text-sm hover:bg-[#FFF0F5] transition-colors"
+            className="w-full py-2.5 mb-3 rounded-xl border border-[#CBD1F2] text-[#4A4A6A] text-sm hover:bg-[#E8EAF9] transition-colors"
           >
             ✏️ Sửa thông tin & thời gian
           </button>
@@ -148,7 +150,7 @@ const SubscriptionDetailModal = ({
                 <select
                   value={renewPlan}
                   onChange={(e) => setRenewPlan(e.target.value)}
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none flex-1"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none flex-1"
                 >
                   <option value="monthly">🌸 Gia hạn Tháng</option>
                   <option value="quarterly">🎀 Gia hạn Quý</option>

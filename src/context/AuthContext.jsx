@@ -1,15 +1,15 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { apiFetch, setTokens, getRefreshToken, removeToken } from "../api/client";
-
-export const AuthContext = createContext();
+import { useContext, useState, useEffect } from "react";
+import {
+  apiFetch,
+  setTokens,
+  getRefreshToken,
+  removeToken,
+} from "../api/client";
+import { AuthContext } from "./auth-context";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   const checkAuth = async () => {
     try {
@@ -27,6 +27,10 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   const login = async (email, password) => {
     const res = await apiFetch("/api/auth/login", {

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import CustomerDetailModal from "../components/CustomerDetailModal";
-import { ALL_COLUMNS, SORT_OPTIONS } from "../constansts/mailClubData";
+import { ALL_COLUMNS, SORT_OPTIONS } from "../constants/mailClubData";
 import { apiFetch } from "../api/client";
 import TableSkeleton from "../components/TableSkeleton";
 import { handleApiError } from "../utils/handleError";
+import Pagination from "../components/Pagination";
+import { useClientPagination } from "../utils/useClientPagination";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -21,8 +23,7 @@ const Customers = () => {
 
   const fetchCustomers = async () => {
     try {
-      const res = await apiFetch("/api/users", {
-      });
+      const res = await apiFetch("/api/users", {});
       const data = await res.json();
       if (data.success) setCustomers(data.customers);
     } catch (err) {
@@ -101,6 +102,9 @@ const Customers = () => {
     if (valA > valB) return sortDir === "asc" ? 1 : -1;
     return 0;
   });
+
+  const { page, setPage, totalPages, total, pageSize, pageItems } =
+    useClientPagination(filtered, 10);
 
   if (loading) {
     return <TableSkeleton rows={12} />;
@@ -187,10 +191,10 @@ const Customers = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-hidden overflow-x-auto">
+      <div className="bg-white rounded-3xl border border-[#CBD1F2]/50 overflow-hidden overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[#FFD6E0]/50">
+            <tr className="border-b border-[#CBD1F2]/50">
               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
                 Khách hàng
               </th>
@@ -207,11 +211,11 @@ const Customers = () => {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((c) => (
+            {pageItems.map((c) => (
               <tr
                 key={c._id}
                 onClick={() => setSelectedCustomerId(c._id)}
-                className="border-b border-[#FFD6E0]/30 last:border-0 hover:bg-[#FFFAF5] transition-colors cursor-pointer"
+                className="border-b border-[#CBD1F2]/30 last:border-0 hover:bg-[#FFFAF5] transition-colors cursor-pointer"
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
@@ -222,7 +226,7 @@ const Customers = () => {
                         alt={c.name}
                       />
                     ) : (
-                      <div className="w-9 h-9 rounded-full bg-[#FFD6E0] flex items-center justify-center text-sm font-medium text-[#4A4A6A]">
+                      <div className="w-9 h-9 rounded-full bg-[#CBD1F2] flex items-center justify-center text-sm font-medium text-[#4A4A6A]">
                         {c.name?.[0]?.toUpperCase()}
                       </div>
                     )}
@@ -332,7 +336,7 @@ const Customers = () => {
                   <td className="px-6 py-4">
                     {c.mailClubSubscribed ? (
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-xs px-3 py-1 rounded-full font-medium bg-[#FFB7C5] text-white w-fit">
+                        <span className="text-xs px-3 py-1 rounded-full font-medium bg-[#8B98E3] text-white w-fit">
                           ✓{" "}
                           {c.mailClubPlan === "monthly"
                             ? "Gói Tháng"
@@ -368,6 +372,13 @@ const Customers = () => {
           </div>
         )}
       </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        pageSize={pageSize}
+        onPageChange={setPage}
+      />
 
       {/* Modal chi tiết */}
       {selectedCustomerId && (

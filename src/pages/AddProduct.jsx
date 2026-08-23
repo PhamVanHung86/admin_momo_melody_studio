@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CATEGORIES } from "../constansts/mailClubData";
+import { CATEGORIES } from "../constants/mailClubData";
 import { apiFetch } from "../api/client";
 import toast from "react-hot-toast";
 import { handleApiError } from "../utils/handleError";
@@ -9,7 +9,6 @@ import CuteLoadingModal from "../components/CuteLoadingModal";
 const AddProduct = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [images, setImages] = useState([null, null, null, null]);
   const [previews, setPreviews] = useState([null, null, null, null]);
 
@@ -58,7 +57,7 @@ const AddProduct = () => {
   const handleSubmit = async () => {
     if (!form.name || !form.price || !form.category) return;
     if (!images.some((img) => img !== null)) {
-      toast.success("Vui lòng thêm ít nhất 1 ảnh!");
+      toast.error("Vui lòng thêm ít nhất 1 ảnh!");
       return;
     }
 
@@ -84,13 +83,14 @@ const AddProduct = () => {
 
       const data = await res.json();
       if (data.success) {
-        //setSuccess(true);
+        toast.success("Thêm sản phẩm thành công!");
         setTimeout(() => navigate("/products"), 1500);
       }
     } catch (err) {
       handleApiError(err, "Thêm sản phẩm thất bại");
     } finally {
       setLoading(false);
+      setIsCreating(false);
     }
   };
 
@@ -112,7 +112,7 @@ const AddProduct = () => {
   return (
     <div className="max-w-3xl flex flex-col gap-6">
       {/* Upload ảnh */}
-      <div className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50">
+      <div className="bg-white rounded-3xl p-6 border border-[#CBD1F2]/50">
         <h3 className="text-sm font-semibold text-[#4A4A6A] mb-5">
           Ảnh sản phẩm
         </h3>
@@ -138,7 +138,7 @@ const AddProduct = () => {
                   )}
                 </div>
               ) : (
-                <label className="w-full aspect-square rounded-2xl border-2 border-dashed border-[#b8deff] hover:border-[#b8deff] flex flex-col items-center justify-center cursor-pointer transition-colors bg-[#FFFAF5] hover:bg-[#FFF0F5]">
+                <label className="w-full aspect-square rounded-2xl border-2 border-dashed border-[#b8deff] hover:border-[#b8deff] flex flex-col items-center justify-center cursor-pointer transition-colors bg-[#FFFAF5] hover:bg-[#E8EAF9]">
                   <span className="text-2xl">+</span>
                   <span className="text-[10px] text-[#4A4A6A]/40 mt-1">
                     {index === 0 ? "Ảnh chính" : `Ảnh ${index + 1}`}
@@ -157,7 +157,7 @@ const AddProduct = () => {
       </div>
 
       {/* Thông tin sản phẩm */}
-      <div className="bg-white rounded-3xl p-6 border border-[#FFD6E0]/50 flex flex-col gap-5">
+      <div className="bg-white rounded-3xl p-6 border border-[#CBD1F2]/50 flex flex-col gap-5">
         <h3 className="text-sm font-semibold text-[#4A4A6A]">
           Thông tin sản phẩm
         </h3>
@@ -269,7 +269,7 @@ const AddProduct = () => {
         <button
           onClick={handleSubmit}
           disabled={loading || !form.name || !form.price}
-          className="flex-1 py-3 rounded-2xl bg-[#b8deff] text-white text-sm font-semibold hover:bg-[#ff9db5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 py-3 rounded-2xl bg-[#b8deff] text-white text-sm font-semibold hover:bg-[#8B98E3] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Đang lưu..." : "Thêm sản phẩm 🌸"}
         </button>

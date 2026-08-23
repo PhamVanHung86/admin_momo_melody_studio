@@ -65,7 +65,7 @@ export const SORT_OPTIONS = [
 ];
 
 export const statusColor_order = {
-  "Đang xử lý": "bg-[#FFD6E0] text-[#4A4A6A]",
+  "Đang xử lý": "bg-[#CBD1F2] text-[#4A4A6A]",
   "Đã xác nhận": "bg-[#C9A0FF] text-white",
   "Đang giao": "bg-[#FFF0A0] text-[#4A4A6A]",
   "Đã giao": "bg-[#B8DEFF] text-[#4A4A6A]",
@@ -73,7 +73,7 @@ export const statusColor_order = {
 };
 
 export const PIE_COLORS = [
-  "#FFB7C5",
+  "#8B98E3",
   "#FFD9A0",
   "#B8DEFF",
   "#C9A0FF",
@@ -100,10 +100,10 @@ export const CATEGORIES_NAME = [
 ];
 
 export const bgColor = {
-  "phone-charms": "bg-[#FFD6E0]",
+  "phone-charms": "bg-[#CBD1F2]",
   keychain: "bg-[#FFF0A0]",
   pins: "bg-[#B8DEFF]",
-  "mail-club": "bg-[#FFD6E0]",
+  "mail-club": "bg-[#CBD1F2]",
   postcards: "bg-[#FFF0A0]",
   stickers: "bg-[#B8DEFF]",
 };

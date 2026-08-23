@@ -23,7 +23,7 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-[#FFFAF5] flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-white rounded-3xl p-8 border border-[#FFD6E0]/50 shadow-sm">
+      <div className="w-full max-w-sm bg-white rounded-3xl p-8 border border-[#CBD1F2]/50 shadow-sm">
         <h1
           style={{ fontFamily: "'Dancing Script', cursive" }}
           className="text-3xl text-[#4A4A6A] text-center mb-1"

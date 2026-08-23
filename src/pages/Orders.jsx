@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { statusColor_order, statusOptions } from "../constansts/mailClubData";
+import { statusColor_order, statusOptions } from "../constants/mailClubData";
 import { apiFetch } from "../api/client";
 import TableSkeleton from "../components/TableSkeleton";
 import ConfirmModal from "../components/ConfirmModal";
 import toast from "react-hot-toast";
 import { handleApiError } from "../utils/handleError";
+import Pagination from "../components/Pagination";
+import { useClientPagination } from "../utils/useClientPagination";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -17,8 +19,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await apiFetch("/api/orders", {
-      });
+      const res = await apiFetch("/api/orders", {});
       const data = await res.json();
       if (data.success) setOrders(data.orders);
     } catch (err) {
@@ -96,6 +97,9 @@ const Orders = () => {
     return matchStatus && matchSearch;
   });
 
+  const { page, setPage, totalPages, total, pageSize, pageItems } =
+    useClientPagination(filtered, 10);
+
   if (loading) {
     return <TableSkeleton rows={12} />;
   }
@@ -139,10 +143,10 @@ const Orders = () => {
 
       {/* Danh sách đơn hàng */}
       <div className="flex flex-col gap-4">
-        {filtered.map((order) => (
+        {pageItems.map((order) => (
           <div
             key={order._id}
-            className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-hidden"
+            className="bg-white rounded-3xl border border-[#CBD1F2]/50 overflow-hidden"
           >
             {/* Header — click để mở rộng */}
             <div
@@ -205,7 +209,7 @@ const Orders = () => {
 
             {/* Chi tiết — mở rộng */}
             {expandedId === order._id && (
-              <div className="px-6 py-4 border-t border-[#FFD6E0]/50 bg-[#FFFAF5] flex flex-col gap-4">
+              <div className="px-6 py-4 border-t border-[#CBD1F2]/50 bg-[#FFFAF5] flex flex-col gap-4">
                 {/* Thông tin giao hàng */}
                 <div>
                   <p className="text-xs font-semibold text-[#4A4A6A]/50 uppercase mb-2">
@@ -232,7 +236,7 @@ const Orders = () => {
                   {order.items.map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-3 py-2 border-b border-[#FFD6E0]/30 last:border-0"
+                      className="flex items-center gap-3 py-2 border-b border-[#CBD1F2]/30 last:border-0"
                     >
                       <img
                         src={item.image}
@@ -267,7 +271,7 @@ const Orders = () => {
         ))}
 
         {filtered.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-3xl border border-[#FFD6E0]/50">
+          <div className="text-center py-16 bg-white rounded-3xl border border-[#CBD1F2]/50">
             <span className="text-4xl">📦</span>
             <p className="text-sm text-[#4A4A6A]/40 mt-3">
               {searchQuery
@@ -277,6 +281,14 @@ const Orders = () => {
           </div>
         )}
       </div>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        pageSize={pageSize}
+        onPageChange={setPage}
+      />
 
       <ConfirmModal
         open={!!confirmTarget}

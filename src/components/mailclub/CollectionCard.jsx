@@ -1,9 +1,9 @@
 import React from "react";
-import { MONTHS } from "../../constansts/mailClubData";
+import { MONTHS } from "../../constants/mailClubData";
 
 const CollectionCard = ({ col, onToggleActive, onEdit, onDelete }) => {
   return (
-    <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-hidden">
+    <div className="bg-white rounded-3xl border border-[#CBD1F2]/50 overflow-hidden">
       {/* Preview ảnh */}
       <div className="grid grid-cols-3 gap-1 p-2 bg-[#FFFAF5]">
         {col.images.slice(0, 6).map((img, i) => (
@@ -40,7 +40,7 @@ const CollectionCard = ({ col, onToggleActive, onEdit, onDelete }) => {
         <div className="flex gap-2">
           <button
             onClick={() => onEdit(col)}
-            className="flex-1 text-xs py-2 rounded-xl border border-[#FFD6E0] text-[#4A4A6A] hover:bg-[#FFF0F5] transition-colors"
+            className="flex-1 text-xs py-2 rounded-xl border border-[#CBD1F2] text-[#4A4A6A] hover:bg-[#E8EAF9] transition-colors"
           >
             ✏️ Quản lý & Sửa thông tin
           </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { statusColor_order } from "../constansts/mailClubData";
+import { statusColor_order } from "../constants/mailClubData";
 import { apiFetch } from "../api/client";
 import { handleApiError } from "../utils/handleError";
 
@@ -39,7 +39,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
           ) : customer ? (
             <>
               {/* Header */}
-              <div className="p-6 border-b border-[#FFD6E0]/50 flex items-start justify-between flex-shrink-0">
+              <div className="p-6 border-b border-[#CBD1F2]/50 flex items-start justify-between flex-shrink-0">
                 <div className="flex items-center gap-4">
                   {customer.avatar ? (
                     <img
@@ -48,7 +48,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                       alt={customer.name}
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-full bg-[#FFD6E0] flex items-center justify-center text-lg font-medium text-[#4A4A6A]">
+                    <div className="w-14 h-14 rounded-full bg-[#CBD1F2] flex items-center justify-center text-lg font-medium text-[#4A4A6A]">
                       {customer.name?.[0]?.toUpperCase()}
                     </div>
                   )}
@@ -70,7 +70,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                 </div>
                 <button
                   onClick={onClose}
-                  className="text-[#4A4A6A]/30 hover:text-[#FFB7C5] text-2xl leading-none"
+                  className="text-[#4A4A6A]/30 hover:text-[#8B98E3] text-2xl leading-none"
                 >
                   ×
                 </button>
@@ -80,7 +80,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
               <div className="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-[#FFD6E0]/30 rounded-2xl p-4 text-center">
+                  <div className="bg-[#CBD1F2]/30 rounded-2xl p-4 text-center">
                     <p className="text-xs text-[#4A4A6A]/50 mb-1">
                       Tổng đơn hàng
                     </p>
@@ -92,7 +92,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                     <p className="text-xs text-[#4A4A6A]/50 mb-1">
                       Tổng chi tiêu
                     </p>
-                    <p className="text-lg font-semibold text-[#FFB7C5]">
+                    <p className="text-lg font-semibold text-[#8B98E3]">
                       {customer.totalSpent.toLocaleString()} đ
                     </p>
                   </div>
@@ -129,7 +129,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                     <div className="flex justify-between">
                       <span className="text-[#4A4A6A]/50">Mail Club</span>
                       <span
-                        className={`font-medium ${customer.mailClubSubscribed ? "text-[#FFB7C5]" : "text-[#4A4A6A]/40"}`}
+                        className={`font-medium ${customer.mailClubSubscribed ? "text-[#8B98E3]" : "text-[#4A4A6A]/40"}`}
                       >
                         {customer.mailClubSubscribed
                           ? "✓ Đã đăng ký"
@@ -149,7 +149,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                       {customer.orders.map((order) => (
                         <div
                           key={order._id}
-                          className="border border-[#FFD6E0]/50 rounded-2xl p-4"
+                          className="border border-[#CBD1F2]/50 rounded-2xl p-4"
                         >
                           <div className="flex items-center justify-between mb-2">
                             <p className="text-sm font-medium text-[#4A4A6A]">
@@ -175,7 +175,7 @@ const CustomerDetailModal = ({ customerId, onClose }) => {
                               </p>
                             ))}
                           </div>
-                          <p className="text-sm font-semibold text-[#FFB7C5] text-right mt-2">
+                          <p className="text-sm font-semibold text-[#8B98E3] text-right mt-2">
                             {order.total.toLocaleString()} đ
                           </p>
                         </div>

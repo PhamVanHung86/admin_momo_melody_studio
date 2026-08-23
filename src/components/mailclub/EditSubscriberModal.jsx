@@ -30,7 +30,7 @@ const EditSubscriberModal = ({
                 onChange={(e) =>
                   setEditTimeForm({ ...editTimeForm, name: e.target.value })
                 }
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -41,7 +41,7 @@ const EditSubscriberModal = ({
                 onChange={(e) =>
                   setEditTimeForm({ ...editTimeForm, email: e.target.value })
                 }
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -52,7 +52,7 @@ const EditSubscriberModal = ({
                 onChange={(e) =>
                   setEditTimeForm({ ...editTimeForm, phone: e.target.value })
                 }
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -64,7 +64,7 @@ const EditSubscriberModal = ({
                   setEditTimeForm({ ...editTimeForm, address: e.target.value })
                 }
                 rows={2}
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
 
@@ -76,7 +76,7 @@ const EditSubscriberModal = ({
                   onChange={(e) =>
                     setEditTimeForm({ ...editTimeForm, plan: e.target.value })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 >
                   <option value="monthly">🌸 Tháng</option>
                   <option value="quarterly">🎀 Quý</option>
@@ -89,7 +89,7 @@ const EditSubscriberModal = ({
                   onChange={(e) =>
                     setEditTimeForm({ ...editTimeForm, status: e.target.value })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 >
                   <option value="active">✅ Active</option>
                   <option value="pending">⏳ Pending</option>
@@ -113,7 +113,7 @@ const EditSubscriberModal = ({
                       startDate: e.target.value,
                     })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -129,7 +129,7 @@ const EditSubscriberModal = ({
                       endDate: e.target.value,
                     })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 />
               </div>
             </div>
@@ -145,7 +145,7 @@ const EditSubscriberModal = ({
                   })
                 }
                 rows={2}
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
           </div>
@@ -153,13 +153,13 @@ const EditSubscriberModal = ({
           <div className="flex gap-3 mt-6">
             <button
               onClick={onClose}
-              className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5]"
+              className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9]"
             >
               Hủy
             </button>
             <button
               onClick={() => onSubmit(selectedSub._id)}
-              className="flex-1 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5]"
+              className="flex-1 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3]"
             >
               Lưu thay đổi 🌸
             </button>

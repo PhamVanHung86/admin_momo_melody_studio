@@ -13,8 +13,7 @@ const NotificationBell = () => {
 
   const fetchPendingCount = useCallback(async () => {
     try {
-      const res = await apiFetch("/api/orders/pending-count", {
-      });
+      const res = await apiFetch("/api/orders/pending-count", {});
       const data = await res.json();
       if (data.success) setPendingCount(data.count);
     } catch (err) {
@@ -49,7 +48,7 @@ const NotificationBell = () => {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative w-9 h-9 rounded-full bg-[#FFFAF5] hover:bg-[#FFF0F5] flex items-center justify-center transition-colors"
+        className="relative w-9 h-9 rounded-full bg-[#FFFAF5] hover:bg-[#E8EAF9] flex items-center justify-center transition-colors"
         aria-label="Thông báo"
       >
         <span className="text-base">🔔</span>
@@ -61,8 +60,8 @@ const NotificationBell = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-[#FFD6E0]/50 shadow-lg overflow-hidden z-50">
-          <div className="px-4 py-3 border-b border-[#FFD6E0]/50">
+        <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-[#CBD1F2]/50 shadow-lg overflow-hidden z-50">
+          <div className="px-4 py-3 border-b border-[#CBD1F2]/50">
             <p className="text-sm font-semibold text-[#4A4A6A]">Thông báo</p>
           </div>
           <div className="px-4 py-4">

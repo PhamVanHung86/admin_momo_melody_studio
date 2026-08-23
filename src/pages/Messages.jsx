@@ -15,8 +15,7 @@ const Messages = () => {
 
   const fetchMessages = async () => {
     try {
-      const res = await apiFetch("/api/contact", {
-      });
+      const res = await apiFetch("/api/contact", {});
       const data = await res.json();
       if (data.success) setMessages(data.messages);
     } catch (err) {
@@ -92,7 +91,7 @@ const Messages = () => {
         <span className="font-semibold text-[#4A4A6A]">{messages.length}</span>{" "}
         tin nhắn
         {unreadCount > 0 && (
-          <span className="ml-2 text-xs bg-[#FFB7C5] text-white px-2 py-0.5 rounded-full">
+          <span className="ml-2 text-xs bg-[#8B98E3] text-white px-2 py-0.5 rounded-full">
             {unreadCount} chưa đọc
           </span>
         )}
@@ -104,13 +103,13 @@ const Messages = () => {
             key={m._id}
             onClick={() => !m.read && markRead(m._id)}
             className={`bg-white rounded-3xl p-5 border cursor-pointer transition-colors ${
-              m.read ? "border-[#FFD6E0]/50" : "border-[#FFB7C5] bg-[#FFF0F5]"
+              m.read ? "border-[#CBD1F2]/50" : "border-[#8B98E3] bg-[#E8EAF9]"
             }`}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 {!m.read && (
-                  <span className="w-2 h-2 rounded-full bg-[#FFB7C5]" />
+                  <span className="w-2 h-2 rounded-full bg-[#8B98E3]" />
                 )}
                 <p className="text-sm font-semibold text-[#4A4A6A]">{m.name}</p>
                 <span className="text-xs text-[#4A4A6A]/40">{m.email}</span>
@@ -135,7 +134,7 @@ const Messages = () => {
         ))}
 
         {messages.length === 0 && (
-          <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 text-center py-16">
+          <div className="bg-white rounded-3xl border border-[#CBD1F2]/50 text-center py-16">
             <span className="text-4xl">📩</span>
             <p className="text-sm text-[#4A4A6A]/40 mt-3">
               Chưa có tin nhắn nào

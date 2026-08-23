@@ -38,12 +38,12 @@ export default function CuteSpinner({
       <div className="relative flex items-center justify-center">
         {/* 1. Hiệu ứng quầng sáng mờ tỏa ra phía sau (Chỉ dành cho size lg & xl) */}
         {(size === "lg" || size === "xl") && (
-          <div className="absolute inset-0 bg-[#FFB7C5]/35 rounded-full blur-md animate-pulse" />
+          <div className="absolute inset-0 bg-[#8B98E3]/35 rounded-full blur-md animate-pulse" />
         )}
 
         {/* 2. Vòng xoay đa sắc Pastel */}
         <div
-          className={`${sizeMap[size]} rounded-full border-[#FFD6E0] border-t-[#8B98E3] border-r-[#FFB7C5] animate-spin`}
+          className={`${sizeMap[size]} rounded-full border-[#CBD1F2] border-t-[#8B98E3] border-r-[#8B98E3] animate-spin`}
           style={{ animationDuration: "0.85s" }}
         />
 

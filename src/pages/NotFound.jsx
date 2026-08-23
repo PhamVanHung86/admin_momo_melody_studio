@@ -13,7 +13,7 @@ const NotFound = () => {
       </p>
       <Link
         to="/dashboard"
-        className="mt-5 bg-[#FFB7C5] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#ff9db5] transition-colors"
+        className="mt-5 bg-[#8B98E3] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#8B98E3] transition-colors"
       >
         Về Dashboard
       </Link>

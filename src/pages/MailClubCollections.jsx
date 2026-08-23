@@ -52,8 +52,7 @@ const MailClubCollections = () => {
 
   const fetchCollections = async () => {
     try {
-      const res = await apiFetch("/api/mail-club-collections/admin", {
-      });
+      const res = await apiFetch("/api/mail-club-collections/admin", {});
       const data = await res.json();
       if (data.success) setCollections(data.collections);
     } catch (err) {
@@ -319,7 +318,7 @@ const MailClubCollections = () => {
         </p>
         <button
           onClick={() => setShowAddForm(true)}
-          className="bg-[#FFB7C5] text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-[#ff9db5] transition-colors"
+          className="bg-[#8B98E3] text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-[#8B98E3] transition-colors"
         >
           🌸 Tạo bộ sưu tập mới
         </button>
@@ -338,7 +337,7 @@ const MailClubCollections = () => {
         ))}
 
         {collections.length === 0 && (
-          <div className="col-span-2 bg-white rounded-3xl border border-[#FFD6E0]/50 text-center py-16">
+          <div className="col-span-2 bg-white rounded-3xl border border-[#CBD1F2]/50 text-center py-16">
             <span className="text-4xl">🌸</span>
             <p className="text-sm text-[#4A4A6A]/40 mt-3">
               Chưa có bộ sưu tập nào
@@ -357,7 +356,6 @@ const MailClubCollections = () => {
         handleImageSelect={handleImageSelect}
         handleCreate={handleCreate}
         isUploading={isUploading} // Modal này vẫn dùng để hiển thị spinner trên nút bấm
-        setIsUploading={setIsUploading}
       />
 
       {/* Modal Chỉnh sửa / Quản lý ảnh */}
@@ -374,7 +372,6 @@ const MailClubCollections = () => {
         addImageFiles={addImageFiles}
         handleAddImages={handleAddImages}
         isAddingImages={isAddingImages}
-        setIsAddingImages={setIsAddingImages}
       />
 
       {/* Modal Xác nhận xóa Bộ sưu tập */}

@@ -1,5 +1,5 @@
 import React from "react";
-import { statusColor, statusLabel } from "../../constansts/mailClubData";
+import { statusColor, statusLabel } from "../../constants/mailClubData";
 
 const CustomEmailModal = ({
   isOpen,
@@ -22,13 +22,13 @@ const CustomEmailModal = ({
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl px-4 max-h-[90vh]">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-[#FFD6E0]/50 flex items-center justify-between flex-shrink-0">
+          <div className="px-6 py-4 border-b border-[#CBD1F2]/50 flex items-center justify-between flex-shrink-0">
             <h3 className="text-lg font-semibold text-[#4A4A6A]">
               ✉️ Soạn email gửi khách
             </h3>
             <button
               onClick={onClose}
-              className="text-[#4A4A6A]/30 hover:text-[#FFB7C5] text-2xl"
+              className="text-[#4A4A6A]/30 hover:text-[#8B98E3] text-2xl"
             >
               ×
             </button>
@@ -78,8 +78,8 @@ const CustomEmailModal = ({
                     }
                     className={`py-3 px-3 rounded-2xl text-xs font-medium transition-all text-center ${
                       emailForm.recipientType === opt.value
-                        ? "bg-[#FFB7C5] text-white"
-                        : "bg-[#FFFAF5] text-[#4A4A6A]/60 border border-[#FFD6E0] hover:border-[#FFB7C5]"
+                        ? "bg-[#8B98E3] text-white"
+                        : "bg-[#FFFAF5] text-[#4A4A6A]/60 border border-[#CBD1F2] hover:border-[#8B98E3]"
                     }`}
                   >
                     <p>{opt.label}</p>
@@ -92,7 +92,7 @@ const CustomEmailModal = ({
 
               {/* Chọn từng người */}
               {emailForm.recipientType === "specific" && (
-                <div className="border border-[#FFD6E0] rounded-2xl p-3 max-h-40 overflow-y-auto flex flex-col gap-1 mt-2">
+                <div className="border border-[#CBD1F2] rounded-2xl p-3 max-h-40 overflow-y-auto flex flex-col gap-1 mt-2">
                   {subscriptions.map((sub) => (
                     <label
                       key={sub._id}
@@ -109,7 +109,7 @@ const CustomEmailModal = ({
                               : [...prev.specificIds, sub._id],
                           }))
                         }
-                        className="accent-[#FFB7C5]"
+                        className="accent-[#8B98E3]"
                       />
                       <div>
                         <p className="text-sm text-[#4A4A6A]">{sub.name}</p>
@@ -137,7 +137,7 @@ const CustomEmailModal = ({
                   setEmailForm({ ...emailForm, subject: e.target.value })
                 }
                 placeholder="VD: 🎀 Bộ sưu tập tháng 7 đã ra mắt!"
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -153,7 +153,7 @@ const CustomEmailModal = ({
                 }
                 rows={6}
                 placeholder="Viết nội dung email tại đây...&#10;&#10;VD: Tháng này momo có ra mắt bộ sưu tập mới với chủ đề..."
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
 
@@ -171,7 +171,7 @@ const CustomEmailModal = ({
                       setEmailForm({ ...emailForm, buttonText: e.target.value })
                     }
                     placeholder="VD: Xem ngay 🌸"
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -181,15 +181,15 @@ const CustomEmailModal = ({
                     onChange={(e) =>
                       setEmailForm({ ...emailForm, buttonLink: e.target.value })
                     }
-                    placeholder="VD: https://momomelody.vn"
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                    placeholder="VD: https://momomeomeow.com"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                   />
                 </div>
               </div>
             </div>
 
             {/* Preview tóm tắt */}
-            <div className="bg-[#FFFAF5] rounded-2xl p-4 border border-[#FFD6E0]/50">
+            <div className="bg-[#FFFAF5] rounded-2xl p-4 border border-[#CBD1F2]/50">
               <p className="text-xs text-[#4A4A6A]/50 mb-2">📋 Tóm tắt:</p>
               <p className="text-xs text-[#4A4A6A]">
                 Gửi tới:{" "}
@@ -210,10 +210,10 @@ const CustomEmailModal = ({
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-[#FFD6E0]/50 flex gap-3 flex-shrink-0">
+          <div className="px-6 py-4 border-t border-[#CBD1F2]/50 flex gap-3 flex-shrink-0">
             <button
               onClick={onClose}
-              className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5]"
+              className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9]"
             >
               Hủy
             </button>
@@ -222,7 +222,7 @@ const CustomEmailModal = ({
               disabled={
                 emailSending || !emailForm.subject || !emailForm.message
               }
-              className="flex-1 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5] disabled:opacity-50"
+              className="flex-1 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3] disabled:opacity-50"
             >
               {emailSending ? "Đang gửi..." : `Gửi email ✉️`}
             </button>

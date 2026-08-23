@@ -24,7 +24,7 @@ const AddSubscriberModal = ({
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs text-[#4A4A6A]/60">
-                Họ tên <span className="text-[#FFB7C5]">*</span>
+                Họ tên <span className="text-[#8B98E3]">*</span>
               </label>
               <input
                 value={addForm.name}
@@ -32,13 +32,13 @@ const AddSubscriberModal = ({
                   setAddForm({ ...addForm, name: e.target.value })
                 }
                 placeholder="Nguyễn Văn A"
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs text-[#4A4A6A]/60">
-                Email <span className="text-[#FFB7C5]">*</span>
+                Email <span className="text-[#8B98E3]">*</span>
               </label>
               <input
                 type="email"
@@ -47,13 +47,13 @@ const AddSubscriberModal = ({
                   setAddForm({ ...addForm, email: e.target.value })
                 }
                 placeholder="example@gmail.com"
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs text-[#4A4A6A]/60">
-                Số điện thoại <span className="text-[#FFB7C5]">*</span>
+                Số điện thoại <span className="text-[#8B98E3]">*</span>
               </label>
               <input
                 value={addForm.phone}
@@ -61,7 +61,7 @@ const AddSubscriberModal = ({
                   setAddForm({ ...addForm, phone: e.target.value })
                 }
                 placeholder="0901 234 567"
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -74,7 +74,7 @@ const AddSubscriberModal = ({
                 }
                 rows={2}
                 placeholder="Số nhà, đường, phường, quận, tỉnh/thành phố"
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
 
@@ -86,7 +86,7 @@ const AddSubscriberModal = ({
                   onChange={(e) =>
                     setAddForm({ ...addForm, plan: e.target.value })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 >
                   <option value="monthly">🌸 Tháng</option>
                   <option value="quarterly">🎀 Quý</option>
@@ -99,7 +99,7 @@ const AddSubscriberModal = ({
                   onChange={(e) =>
                     setAddForm({ ...addForm, status: e.target.value })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 >
                   <option value="active">✅ Active</option>
                   <option value="pending">⏳ Pending</option>
@@ -119,12 +119,12 @@ const AddSubscriberModal = ({
                   onChange={(e) =>
                     setAddForm({ ...addForm, startDate: e.target.value })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs text-[#4A4A6A]/60">
-                  Ngày hết hạn
+                  Lượt tự động còn lại
                 </label>
                 <input
                   type="date"
@@ -132,7 +132,7 @@ const AddSubscriberModal = ({
                   onChange={(e) =>
                     setAddForm({ ...addForm, endDate: e.target.value })
                   }
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 />
               </div>
             </div>
@@ -146,7 +146,7 @@ const AddSubscriberModal = ({
                 }
                 rows={2}
                 placeholder="VD: Khách nhắn tin Facebook, tháng 5/2025..."
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
           </div>
@@ -154,13 +154,13 @@ const AddSubscriberModal = ({
           <div className="flex gap-3 mt-6">
             <button
               onClick={onClose}
-              className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5]"
+              className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9]"
             >
               Hủy
             </button>
             <button
               onClick={onSubmit}
-              className="flex-1 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5]"
+              className="flex-1 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3]"
             >
               Thêm subscriber ✅
             </button>

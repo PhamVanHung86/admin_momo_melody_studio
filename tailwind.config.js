@@ -4,13 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        "pastel-pink": "#FFB7C5",
-        "pastel-pink-light": "#FFD6E0",
+        "pastel-pink": "#8B98E3",
+        "pastel-pink-light": "#CBD1F2",
         "pastel-yellow": "#FFF0A0",
         "pastel-blue": "#B8DEFF",
         "pastel-blue-light": "#D6EEFF",
         "bg-page": "#FFFAF5",
-        "bg-card": "#FFF0F5",
+        "bg-card": "#E8EAF9",
         "text-main": "#4A4A6A",
       },
 

@@ -25,14 +25,14 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-[#FFFAF5] flex items-center justify-center px-4">
-          <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-[#FFD6E0]/50 shadow-sm text-center">
+          <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-[#CBD1F2]/50 shadow-sm text-center">
             <span className="text-4xl">😵</span>
             <h1 className="text-lg font-semibold text-[#4A4A6A] mt-3">
               Đã có lỗi xảy ra
             </h1>
             <p className="text-sm text-[#4A4A6A]/50 mt-2">
-              Trang quản trị gặp sự cố khi hiển thị. Vui lòng tải lại trang;
-              nếu lỗi vẫn tiếp diễn, hãy báo cho đội kỹ thuật.
+              Trang quản trị gặp sự cố khi hiển thị. Vui lòng tải lại trang; nếu
+              lỗi vẫn tiếp diễn, hãy báo cho đội kỹ thuật.
             </p>
             <button
               onClick={this.handleReload}

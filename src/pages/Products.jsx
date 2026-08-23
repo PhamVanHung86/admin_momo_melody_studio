@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { CATEGORIES_NAME, bgColor } from "../constansts/mailClubData";
+import { CATEGORIES_NAME, bgColor } from "../constants/mailClubData";
 import { apiFetch } from "../api/client";
 import TableSkeleton from "../components/TableSkeleton";
 import { handleApiError } from "../utils/handleError";
 import toast from "react-hot-toast";
 import ConfirmModal from "../components/ConfirmModal";
+import Pagination from "../components/Pagination";
+import { useClientPagination } from "../utils/useClientPagination";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -75,6 +77,10 @@ const Products = () => {
     return matchSearch && matchCategory;
   });
 
+  // Phân trang
+  const { page, setPage, totalPages, total, pageSize, pageItems } =
+    useClientPagination(filtered, 10);
+
   if (loading) {
     return <TableSkeleton rows={12} />;
   }
@@ -91,7 +97,7 @@ const Products = () => {
               className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${
                 category === cat
                   ? "bg-[#b8deff] text-white"
-                  : "bg-white text-[#4A4A6A]/60 border border-[#b8deff] hover:border-[#FFB7C5]"
+                  : "bg-white text-[#4A4A6A]/60 border border-[#b8deff] hover:border-[#8B98E3]"
               }`}
             >
               {cat}
@@ -104,11 +110,11 @@ const Products = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Tìm sản phẩm..."
-            className="border border-[#FFD6E0] rounded-xl px-4 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] bg-white"
+            className="border border-[#CBD1F2] rounded-xl px-4 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] bg-white"
           />
           <Link
             to="/products/add"
-            className="bg-[#FFB7C5] text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-[#ff9db5] transition-colors whitespace-nowrap"
+            className="bg-[#8B98E3] text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-[#8B98E3] transition-colors whitespace-nowrap"
           >
             + Thêm mới
           </Link>
@@ -116,10 +122,10 @@ const Products = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-x-auto">
+      <div className="bg-white rounded-3xl border border-[#CBD1F2]/50 overflow-x-auto">
         <table className="w-full min-w-[720px]">
           <thead>
-            <tr className="border-b border-[#FFD6E0]/50">
+            <tr className="border-b border-[#CBD1F2]/50">
               <th className="text-left px-6 py-4 text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider">
                 Sản phẩm
               </th>
@@ -141,14 +147,14 @@ const Products = () => {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((p) => (
+            {pageItems.map((p) => (
               <tr
                 key={p._id}
-                className="border-b border-[#FFD6E0]/30 last:border-0 hover:bg-[#FFFAF5] transition-colors"
+                className="border-b border-[#CBD1F2]/30 last:border-0 hover:bg-[#FFFAF5] transition-colors"
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#FFF0F5] overflow-hidden flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#E8EAF9] overflow-hidden flex-shrink-0">
                       {p.images?.[0] && (
                         <img
                           src={p.images[0]}
@@ -200,7 +206,7 @@ const Products = () => {
                   <div className="flex gap-2">
                     <Link
                       to={`/products/edit/${p._id}`}
-                      className="text-xs px-3 py-1.5 rounded-xl border border-[#b8deff] text-[#4A4A6A] hover:bg-[#FFD6E0] transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-xl border border-[#b8deff] text-[#4A4A6A] hover:bg-[#CBD1F2] transition-colors"
                     >
                       Sửa
                     </Link>
@@ -226,6 +232,14 @@ const Products = () => {
           </div>
         )}
       </div>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        pageSize={pageSize}
+        onPageChange={setPage}
+      />
 
       {/* Modal Xác nhận xóa Sản phẩm */}
       <ConfirmModal

@@ -1,6 +1,6 @@
 import React from "react";
-import { MONTHS } from "../../constansts/mailClubData";
-import CuteLoadingModal from "../CuteLoadingModal"; // TODO: chỉnh lại đường dẫn cho đúng vị trí thật của file này trong project
+import { MONTHS } from "../../constants/mailClubData";
+import CuteLoadingModal from "../CuteLoadingModal";
 
 const EditCollectionModal = ({
   collection,
@@ -15,7 +15,6 @@ const EditCollectionModal = ({
   addImageFiles,
   handleAddImages,
   isAddingImages,
-  setIsAddingImages,
 }) => {
   if (!collection) return null;
 
@@ -37,7 +36,7 @@ const EditCollectionModal = ({
             </div>
           )}
 
-          <div className="flex items-center justify-between mb-5 border-b border-[#FFD6E0]/40 pb-3">
+          <div className="flex items-center justify-between mb-5 border-b border-[#CBD1F2]/40 pb-3">
             <div>
               <h3 className="text-base font-bold text-[#4A4A6A]">
                 ⚙️ Chỉnh sửa: {collection.title}
@@ -49,14 +48,14 @@ const EditCollectionModal = ({
             <button
               onClick={() => !isAddingImages && onClose()}
               disabled={isAddingImages}
-              className="text-[#4A4A6A]/30 hover:text-[#FFB7C5] text-2xl disabled:opacity-30"
+              className="text-[#4A4A6A]/30 hover:text-[#8B98E3] text-2xl disabled:opacity-30"
             >
               ×
             </button>
           </div>
 
           {/* PHẦN 1: THÔNG TIN CƠ BẢN */}
-          <div className="flex flex-col gap-3 mb-6 bg-[#FFFAF5] p-4 rounded-2xl border border-[#FFD6E0]/40">
+          <div className="flex flex-col gap-3 mb-6 bg-[#FFFAF5] p-4 rounded-2xl border border-[#CBD1F2]/40">
             <p className="text-xs font-semibold text-[#4A4A6A]/70 uppercase tracking-wider">
               📝 Thông tin cơ bản
             </p>
@@ -70,7 +69,7 @@ const EditCollectionModal = ({
                 onChange={(e) =>
                   setEditForm({ ...editForm, title: e.target.value })
                 }
-                className="border border-[#FFD6E0] bg-white rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] bg-white rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -82,7 +81,7 @@ const EditCollectionModal = ({
                   onChange={(e) =>
                     setEditForm({ ...editForm, month: e.target.value })
                   }
-                  className="border border-[#FFD6E0] bg-white rounded-xl px-2 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] bg-white rounded-xl px-2 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 >
                   {MONTHS.map((m, i) => (
                     <option key={i} value={i + 1}>
@@ -99,7 +98,7 @@ const EditCollectionModal = ({
                   onChange={(e) =>
                     setEditForm({ ...editForm, year: e.target.value })
                   }
-                  className="border border-[#FFD6E0] bg-white rounded-xl px-2 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] bg-white rounded-xl px-2 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 />
               </div>
             </div>
@@ -114,7 +113,7 @@ const EditCollectionModal = ({
                   setEditForm({ ...editForm, description: e.target.value })
                 }
                 rows={2}
-                className="border border-[#FFD6E0] bg-white rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] bg-white rounded-xl px-3 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
 
@@ -136,7 +135,7 @@ const EditCollectionModal = ({
               <div key={i} className="relative group aspect-square">
                 <img
                   src={img}
-                  className="w-full h-full object-cover rounded-2xl border border-[#FFD6E0]/30"
+                  className="w-full h-full object-cover rounded-2xl border border-[#CBD1F2]/30"
                   alt=""
                 />
                 <button
@@ -158,11 +157,11 @@ const EditCollectionModal = ({
           </div>
 
           {/* PHẦN 3: TẢI THÊM ẢNH */}
-          <div className="border-t border-[#FFD6E0]/50 pt-4">
+          <div className="border-t border-[#CBD1F2]/50 pt-4">
             <p className="text-xs font-semibold text-[#4A4A6A]/50 uppercase tracking-wider mb-2">
               ➕ Tải thêm ảnh mới vào bộ sưu tập
             </p>
-            <label className="border-2 border-dashed border-[#FFD6E0] hover:border-[#FFB7C5] rounded-2xl p-4 cursor-pointer text-center transition-colors block">
+            <label className="border-2 border-dashed border-[#CBD1F2] hover:border-[#8B98E3] rounded-2xl p-4 cursor-pointer text-center transition-colors block">
               <span className="text-xl">🖼️</span>
               <p className="text-xs text-[#4A4A6A]/50 mt-1">
                 Click để chọn thêm ảnh
@@ -192,7 +191,7 @@ const EditCollectionModal = ({
             {addImageFiles.length > 0 && (
               <button
                 onClick={() => handleAddImages(collection._id)}
-                className="w-full mt-3 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5]"
+                className="w-full mt-3 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3]"
               >
                 Tải lên {addImageFiles.length} ảnh mới 🌸
               </button>

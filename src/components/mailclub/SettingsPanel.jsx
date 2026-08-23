@@ -13,7 +13,7 @@ const SettingsPanel = ({
       className={`rounded-3xl p-6 border-2 transition-all ${
         settings.isOpen
           ? "border-[#D4F4DD] bg-[#F0FFF4]"
-          : "border-[#FFD6E0] bg-[#FFF0F5]"
+          : "border-[#CBD1F2] bg-[#E8EAF9]"
       }`}
     >
       <div className="flex items-center justify-between mb-4">
@@ -39,7 +39,7 @@ const SettingsPanel = ({
               className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 settingsForm.isOpen
                   ? "bg-[#D4F4DD] text-green-700 border-2 border-green-300"
-                  : "bg-white border-2 border-[#FFD6E0] text-[#4A4A6A]/50"
+                  : "bg-white border-2 border-[#CBD1F2] text-[#4A4A6A]/50"
               }`}
             >
               🟢 Mở form
@@ -50,8 +50,8 @@ const SettingsPanel = ({
               }
               className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 !settingsForm.isOpen
-                  ? "bg-[#FFD6E0] text-red-500 border-2 border-red-300"
-                  : "bg-white border-2 border-[#FFD6E0] text-[#4A4A6A]/50"
+                  ? "bg-[#CBD1F2] text-red-500 border-2 border-red-300"
+                  : "bg-white border-2 border-[#CBD1F2] text-[#4A4A6A]/50"
               }`}
             >
               🔴 Đóng form
@@ -70,7 +70,7 @@ const SettingsPanel = ({
             onChange={(e) =>
               setSettingsForm({ ...settingsForm, closeAt: e.target.value })
             }
-            className="border border-[#FFD6E0] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+            className="border border-[#CBD1F2] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
           />
         </div>
 
@@ -84,7 +84,7 @@ const SettingsPanel = ({
             onChange={(e) =>
               setSettingsForm({ ...settingsForm, openMessage: e.target.value })
             }
-            className="border border-[#FFD6E0] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+            className="border border-[#CBD1F2] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
           />
         </div>
 
@@ -101,14 +101,14 @@ const SettingsPanel = ({
                 closedMessage: e.target.value,
               })
             }
-            className="border border-[#FFD6E0] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+            className="border border-[#CBD1F2] rounded-xl px-4 py-2.5 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
           />
         </div>
       </div>
 
       <button
         onClick={onSaveSettings}
-        className="mt-4 bg-[#FFB7C5] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#ff9db5] transition-colors"
+        className="mt-4 bg-[#8B98E3] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#8B98E3] transition-colors"
       >
         Lưu cài đặt
       </button>

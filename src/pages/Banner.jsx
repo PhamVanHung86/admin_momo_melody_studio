@@ -30,8 +30,7 @@ const Banners = () => {
 
   const fetchBanners = async () => {
     try {
-      const res = await apiFetch("/api/banners", {
-      });
+      const res = await apiFetch("/api/banners", {});
       const data = await res.json();
       if (data.success) setBanners(data.banners);
     } catch (err) {
@@ -168,7 +167,7 @@ const Banners = () => {
         {banners.map((b) => (
           <div
             key={b._id}
-            className="bg-white rounded-3xl border border-[#FFD6E0]/50 overflow-hidden"
+            className="bg-white rounded-3xl border border-[#CBD1F2]/50 overflow-hidden"
           >
             <div className="aspect-[16/9] overflow-hidden">
               <img
@@ -179,7 +178,7 @@ const Banners = () => {
             </div>
             <div className="p-5">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs px-3 py-1 rounded-full bg-[#FFD6E0] text-[#4A4A6A]">
+                <span className="text-xs px-3 py-1 rounded-full bg-[#CBD1F2] text-[#4A4A6A]">
                   {b.badge}
                 </span>
                 <button
@@ -198,7 +197,7 @@ const Banners = () => {
               </h3>
               <p className="text-xs text-[#4A4A6A]/50 mb-3">{b.description}</p>
               {b.launchDate && (
-                <p className="text-xs text-[#FFB7C5] mb-3">
+                <p className="text-xs text-[#8B98E3] mb-3">
                   📅 Ra mắt:{" "}
                   {new Date(b.launchDate).toLocaleDateString("vi-VN")}
                 </p>
@@ -214,7 +213,7 @@ const Banners = () => {
         ))}
 
         {banners.length === 0 && (
-          <div className="col-span-2 bg-white rounded-3xl border border-[#FFD6E0]/50 text-center py-16">
+          <div className="col-span-2 bg-white rounded-3xl border border-[#CBD1F2]/50 text-center py-16">
             <span className="text-4xl">🎨</span>
             <p className="text-sm text-[#4A4A6A]/40 mt-3">Chưa có banner nào</p>
           </div>
@@ -258,7 +257,7 @@ const Banners = () => {
                       </button>
                     </div>
                   ) : (
-                    <label className="aspect-[16/9] rounded-2xl border-2 border-dashed border-[#FFD6E0] hover:border-[#FFB7C5] flex items-center justify-center cursor-pointer bg-[#FFFAF5]">
+                    <label className="aspect-[16/9] rounded-2xl border-2 border-dashed border-[#CBD1F2] hover:border-[#8B98E3] flex items-center justify-center cursor-pointer bg-[#FFFAF5]">
                       <span className="text-2xl text-[#4A4A6A]/30">
                         + Thêm ảnh
                       </span>
@@ -280,7 +279,7 @@ const Banners = () => {
                       setForm({ ...form, title: e.target.value })
                     }
                     placeholder="VD: Bộ sưu tập Hè 2026 sắp ra mắt!"
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                   />
                 </div>
 
@@ -293,7 +292,7 @@ const Banners = () => {
                     }
                     rows={3}
                     placeholder="Giới thiệu ngắn về chương trình/sản phẩm..."
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
                   />
                 </div>
 
@@ -308,7 +307,7 @@ const Banners = () => {
                       onChange={(e) =>
                         setForm({ ...form, launchDate: e.target.value })
                       }
-                      className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                      className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
@@ -321,7 +320,7 @@ const Banners = () => {
                         setForm({ ...form, badge: e.target.value })
                       }
                       placeholder="Sắp ra mắt"
-                      className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                      className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                     />
                   </div>
                 </div>
@@ -336,7 +335,7 @@ const Banners = () => {
                       setForm({ ...form, linkTo: e.target.value })
                     }
                     placeholder="VD: /collection hoặc /phone-charms"
-                    className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                    className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                   />
                 </div>
               </div>
@@ -344,13 +343,13 @@ const Banners = () => {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowForm(false)}
-                  className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5] transition-colors"
+                  className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9] transition-colors"
                 >
                   Hủy
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="flex-1 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5] transition-colors"
+                  className="flex-1 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3] transition-colors"
                 >
                   Tạo banner 🎨
                 </button>

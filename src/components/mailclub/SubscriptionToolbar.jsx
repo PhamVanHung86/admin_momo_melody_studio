@@ -27,7 +27,7 @@ const SubscriptionToolbar = ({
       <div className="flex gap-2">
         <button
           onClick={onOpenAddForm}
-          className="text-xs px-4 py-2 rounded-xl bg-[#FFB7C5] text-white font-medium hover:bg-[#ff9db5] transition-colors"
+          className="text-xs px-4 py-2 rounded-xl bg-[#8B98E3] text-white font-medium hover:bg-[#8B98E3] transition-colors"
         >
           + Thêm subscriber
         </button>
@@ -36,7 +36,7 @@ const SubscriptionToolbar = ({
           disabled={sending}
           className="text-xs px-4 py-2 rounded-xl bg-[#E8E4F5] text-[#8B98E3] font-medium hover:bg-[#D4D0F0] transition-colors disabled:opacity-50"
         >
-          {sending ? "Đang gửi..." : "📧 Gửi nhắc gia hạn"}
+          {sending ? "Đang xử lý..." : "🌸 Mở Mail Club tháng mới"}
         </button>
         <button
           onClick={onOpenEmailModal}
@@ -49,7 +49,7 @@ const SubscriptionToolbar = ({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Tìm tên, email, SĐT..."
-          className="border border-[#FFD6E0] rounded-xl px-4 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] bg-white w-48"
+          className="border border-[#CBD1F2] rounded-xl px-4 py-2 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] bg-white w-48"
         />
       </div>
     </div>

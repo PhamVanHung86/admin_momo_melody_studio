@@ -1,7 +1,6 @@
 import React from "react";
-import { MONTHS } from "../../constansts/mailClubData";
-import CuteLoadingModal from "../CuteLoadingModal"; // TODO: chỉnh lại đường dẫn cho đúng vị trí thật của file này trong project
-
+import { MONTHS } from "../../constants/mailClubData";
+import CuteLoadingModal from "../CuteLoadingModal";
 const CreateCollectionModal = ({
   show,
   onClose,
@@ -11,7 +10,6 @@ const CreateCollectionModal = ({
   handleImageSelect,
   handleCreate,
   isUploading,
-  setIsUploading,
 }) => {
   if (!show) return null;
 
@@ -44,7 +42,7 @@ const CreateCollectionModal = ({
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 placeholder="VD: Bộ sưu tập Tháng 6 🌸"
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
               />
             </div>
 
@@ -54,7 +52,7 @@ const CreateCollectionModal = ({
                 <select
                   value={form.month}
                   onChange={(e) => setForm({ ...form, month: e.target.value })}
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 >
                   {MONTHS.map((m, i) => (
                     <option key={i} value={i + 1}>
@@ -69,7 +67,7 @@ const CreateCollectionModal = ({
                   type="number"
                   value={form.year}
                   onChange={(e) => setForm({ ...form, year: e.target.value })}
-                  className="border border-[#FFD6E0] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5]"
+                  className="border border-[#CBD1F2] rounded-xl px-3 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3]"
                 />
               </div>
             </div>
@@ -85,7 +83,7 @@ const CreateCollectionModal = ({
                 }
                 rows={2}
                 placeholder="Giới thiệu về bộ sưu tập tháng này..."
-                className="border border-[#FFD6E0] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#FFB7C5] resize-none"
+                className="border border-[#CBD1F2] rounded-xl px-4 py-3 text-sm text-[#4A4A6A] outline-none focus:border-[#8B98E3] resize-none"
               />
             </div>
 
@@ -93,7 +91,7 @@ const CreateCollectionModal = ({
               <label className="text-xs text-[#4A4A6A]/60">
                 Ảnh sản phẩm (tối đa 10 ảnh)
               </label>
-              <label className="border-2 border-dashed border-[#FFD6E0] hover:border-[#FFB7C5] rounded-2xl p-4 cursor-pointer text-center transition-colors">
+              <label className="border-2 border-dashed border-[#CBD1F2] hover:border-[#8B98E3] rounded-2xl p-4 cursor-pointer text-center transition-colors">
                 <span className="text-2xl">🖼️</span>
                 <p className="text-xs text-[#4A4A6A]/50 mt-1">
                   Click để chọn nhiều ảnh
@@ -124,13 +122,13 @@ const CreateCollectionModal = ({
           <div className="flex gap-3 mt-6">
             <button
               onClick={onClose}
-              className="flex-1 py-3 rounded-2xl border border-[#FFD6E0] text-sm text-[#4A4A6A] hover:bg-[#FFF0F5]"
+              className="flex-1 py-3 rounded-2xl border border-[#CBD1F2] text-sm text-[#4A4A6A] hover:bg-[#E8EAF9]"
             >
               Hủy
             </button>
             <button
               onClick={handleCreate}
-              className="flex-1 py-3 rounded-2xl bg-[#FFB7C5] text-white text-sm font-semibold hover:bg-[#ff9db5]"
+              className="flex-1 py-3 rounded-2xl bg-[#8B98E3] text-white text-sm font-semibold hover:bg-[#8B98E3]"
             >
               Tạo bộ sưu tập 🌸
             </button>
