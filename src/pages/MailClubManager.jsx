@@ -188,6 +188,20 @@ const MailClubManager = () => {
     }
   };
 
+  const markShipped = async (sub) => {
+    try {
+      await apiFetch(`/api/mail-club/${sub._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shipped: true }),
+      });
+      toast.success("Đã đánh dấu giao hàng!");
+      fetchSubs(statusFilter);
+    } catch (err) {
+      handleApiError(err, "Đánh dấu đã giao thất bại");
+    }
+  };
+
   // 1. Mở modal xác nhận huỷ (thay cho window.confirm)
   const cancelSub = (id) => {
     setCancelTargetId(id);
@@ -287,7 +301,7 @@ const MailClubManager = () => {
   const counts = {
     pending: subscriptions.filter((s) => s.status === "pending").length,
     expiring: subscriptions.filter(
-      (s) => s.status === "active" && s.remainingTurns === 0,
+      (s) => s.status === "active" && s.remainingTurns <= 0,
     ).length,
   };
 
@@ -444,6 +458,7 @@ const MailClubManager = () => {
           setAdminNote(sub.adminNote || "");
           setShowModal(true);
         }}
+        onMarkShipped={markShipped}
       />
 
       <Pagination

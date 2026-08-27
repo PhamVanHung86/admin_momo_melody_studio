@@ -10,6 +10,7 @@ const SubscriptionTable = ({
   statusFilter,
   setStatusFilter,
   onSelectSub,
+  onMarkShipped,
 }) => {
   return (
     <div className="flex flex-col gap-4">
@@ -59,8 +60,7 @@ const SubscriptionTable = ({
             {filteredSubscriptions.map((s) => {
               // 📬 "Sắp cần đăng ký lại": vẫn active nhưng kỳ này là kỳ tự
               // động CUỐI CÙNG (remainingTurns = 0) — kỳ sau phải đăng ký lại
-              const isExpiring =
-                s.status === "active" && s.remainingTurns === 0;
+              const isExpiring = s.status === "active" && s.remainingTurns <= 0;
 
               return (
                 <tr
@@ -89,20 +89,42 @@ const SubscriptionTable = ({
                     >
                       {statusLabel[s.status]}
                     </span>
-                    {isExpiring && (
-                      <p className="text-xs text-orange-500 mt-1">
-                        ⚠️ Mailclub cuối
+                    {s.status === "active" && (
+                      <p
+                        className={`text-xs mt-1 ${
+                          isExpiring ? "text-orange-500" : "text-[#4A4A6A]/50"
+                        }`}
+                      >
+                        {isExpiring
+                          ? "⚠️ Mailclub cuối"
+                          : `Còn ${s.remainingTurns} Mailclub`}
                       </p>
                     )}
                   </td>
 
                   <td className="px-6 py-4">
                     {s.status === "active" ? (
-                      <p className="text-sm text-[#4A4A6A]">
-                        {s.remainingTurns > 0
-                          ? `Còn ${s.remainingTurns} Mailclub`
-                          : "Done"}
-                      </p>
+                      <div className="flex flex-col gap-1">
+                        {s.shipped ? (
+                          <span className="text-xs px-3 py-1 rounded-full font-medium bg-[#d4e3f4] text-blue-500 w-fit">
+                            📬 Đã giao
+                          </span>
+                        ) : (
+                          <>
+                            <span className="text-xs px-3 py-1 rounded-full font-medium bg-[#FFF0A0] text-[#4A4A6A] w-fit">
+                              🚚 Đang giao hàng
+                            </span>
+                            {onMarkShipped && (
+                              <button
+                                onClick={() => onMarkShipped(s)}
+                                className="text-[11px] text-[#8B98E3] hover:underline text-left"
+                              >
+                                Đánh dấu đã giao
+                              </button>
+                            )}
+                          </>
+                        )}
+                      </div>
                     ) : (
                       <p className="text-xs text-[#4A4A6A]/30">
                         {s.status === "pending" ? "Chưa kích hoạt" : "—"}
