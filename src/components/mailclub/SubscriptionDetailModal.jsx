@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { statusColor, statusLabel } from "../../constants/mailClubData";
 
 const SubscriptionDetailModal = ({
@@ -15,6 +16,32 @@ const SubscriptionDetailModal = ({
   onOpenEditTime,
 }) => {
   if (!selectedSub) return null;
+
+  // Sao chép: "Tên, SĐT, Địa chỉ" (vd: UniWhale, 0388376558, 31/1 Nguyễn Khoa Dục, ...)
+  const handleCopyInfo = async () => {
+    const text = [selectedSub.name, selectedSub.phone, selectedSub.address]
+      .map((v) => (v || "").toString().trim())
+      .filter(Boolean)
+      .join(", ");
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback cho trình duyệt/ngữ cảnh không hỗ trợ Clipboard API
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      toast.success("Đã sao chép thông tin khách hàng!");
+    } catch {
+      toast.error("Không sao chép được, vui lòng thử lại");
+    }
+  };
 
   return (
     <>
@@ -38,6 +65,12 @@ const SubscriptionDetailModal = ({
               </h3>
               <p className="text-sm text-[#4A4A6A]/50">{selectedSub.email}</p>
               <p className="text-sm text-[#4A4A6A]/50">{selectedSub.phone}</p>
+              <button
+                onClick={handleCopyInfo}
+                className="mt-2 text-xs px-3 py-1 rounded-full border border-[#CBD1F2] text-[#8B98E3] hover:bg-[#E8EAF9] transition-colors"
+              >
+                📋 Sao chép
+              </button>
             </div>
             <button
               onClick={onClose}
